@@ -8,12 +8,14 @@ To enable parallelisation in the renderer, set the corresponding flag in the CMa
 
 Everything was written pretty much from scratch in C++ and due to the fact that no GPU is needed the project has barely any dependencies and is fairly portable to most platforms. The only ones I have tested on are OpenBSD and Windows.
 
-The renderer, engine and game can be built using the following:
+The renderer, engine and game can be built and run using the following:
 
     $ mkdir build
     $ cd build
     $ cmake .. -DCMAKE_BUILD_TYPE=Release
-    $ cmake --build .
+    $ cd ..
+    $ cmake --build build
+    $ build/blood
 
 Controls are arrow keys to move around, space to attack and 't' and 'y' to change levels. The second level is basically a secret boss.
 
