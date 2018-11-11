@@ -6,6 +6,8 @@ To enable parallelisation in the renderer, set the corresponding flag in the CMa
 <img src="https://raw.githubusercontent.com/osen/software-3d-renderer/master/docs/ss1.png" width="250" />
 <img src="https://raw.githubusercontent.com/osen/software-3d-renderer/master/docs/ss2.png" width="250" />
 
+Everything was written pretty much from scratch in C++ and due to the fact that no GPU is needed the project has barely any dependencies and is fairly portable to most platforms. The only ones I have tested on are OpenBSD and Windows.
+
 The renderer, engine and game can be built using the following:
 
     $ mkdir build
