@@ -1,0 +1,25 @@
+#ifndef NONCOPYABLE_H
+#define NONCOPYABLE_H
+
+namespace std
+{
+
+namespace sr1
+{
+
+class noncopyable
+{
+private:
+  noncopyable(const noncopyable&) { }
+  const noncopyable& operator=(const noncopyable&) { return *this; }
+
+public:
+  noncopyable() { }
+    
+};
+
+}
+
+}
+
+#endif
