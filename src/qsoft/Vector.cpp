@@ -22,7 +22,7 @@ Vector3::Vector3(float x, float y, float z)
   this->z = z;
 }
 
-Vector3::Vector3(Vector4& value)
+Vector3::Vector3(const Vector4& value)
 {
   x = value.x;
   y = value.y;
@@ -79,7 +79,7 @@ Vector3 Vector3::normalize() const
   return r;
 }
 
-Vector3 Vector3::cross(Vector3& a, Vector3& b)
+Vector3 Vector3::cross(const Vector3& a, const Vector3& b)
 {
   Vector3 r;
 

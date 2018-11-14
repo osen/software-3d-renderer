@@ -23,7 +23,7 @@ struct Vector3
 
   Vector3();
   Vector3(float x, float y, float z);
-  Vector3(Vector4& value);
+  Vector3(const Vector4& value);
   Vector3 normalize() const;
   float length() const;
 
@@ -35,7 +35,7 @@ struct Vector3
   Vector3 operator*(float value);
 
   static float dot(const Vector3& a, const Vector3& b);
-  static Vector3 cross(Vector3& a, Vector3& b);
+  static Vector3 cross(const Vector3& a, const Vector3& b);
 };
 
 struct Vector4

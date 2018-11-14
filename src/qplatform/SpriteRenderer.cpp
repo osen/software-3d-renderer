@@ -40,12 +40,12 @@ void SpriteRenderer::updateMesh()
   f.c.position = qsoft::Vector3(0.5f, 0.5f, 0);
   f.c.texCoord = qsoft::Vector2(right, bottom);
   mesh.addFace(f);
-  f.a.position = qsoft::Vector3(-0.5f, -0.5f, 0);
-  f.a.texCoord = qsoft::Vector2(left, top);
+  f.a.position = qsoft::Vector3(0.5f, 0.5f, 0);
+  f.a.texCoord = qsoft::Vector2(right, bottom);
   f.b.position = qsoft::Vector3(0.5f, -0.5f, 0);
   f.b.texCoord = qsoft::Vector2(right, top);
-  f.c.position = qsoft::Vector3(0.5f, 0.5f, 0);
-  f.c.texCoord = qsoft::Vector2(right, bottom);
+  f.c.position = qsoft::Vector3(-0.5f, -0.5f, 0);
+  f.c.texCoord = qsoft::Vector2(left, top);
   mesh.addFace(f);
 }
 

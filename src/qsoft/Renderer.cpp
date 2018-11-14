@@ -173,6 +173,12 @@ void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
     pts2[i].z = pts[i].position.z / pts[i].position.w;
   }
 
+  Vector3 av = Vector3(pts2[0].x, pts2[0].y, pts2[0].z);
+  Vector3 bv = Vector3(pts2[1].x, pts2[1].y, pts2[1].z);
+  Vector3 cv = Vector3(pts2[2].x, pts2[2].y, pts2[2].z);
+  Vector3 N = Vector3::cross((av - bv), (bv - cv));
+  if(N.z > 0) return;
+
   for(int i = 0; i < 3; i++)
   {
     bboxmin.x = std::max(0.0f, std::min(bboxmin.x, pts2[i].x));
