@@ -4,6 +4,7 @@
 #include "Matrix.h"
 #include "Face.h"
 #include "Color.h"
+#include "ThreadPool.h"
 
 // TODO:
 #include "Debug.h"
@@ -18,6 +19,18 @@
 namespace qsoft
 {
 
+struct RendererImpl;
+
+struct RendererUnit
+{
+  std::vector<Vertex> vertices;
+  std::vector<Vertex> aux;
+  std::weak_ptr<RendererImpl> impl;
+  std::vector<Face>::iterator begin;
+  std::vector<Face>::iterator end;
+  Matrix m;
+};
+
 struct RendererImpl
 {
   Mesh mesh;
@@ -28,21 +41,19 @@ struct RendererImpl
   Texture target;
   Matrix viewport;
 
-  std::vector<Vertex> vertices;
-  std::vector<Vertex> aux;
+  ThreadPool<RendererUnit> pool;
 
-  void clippedTriangle(const Vertex& a, const Vertex& b, const Vertex& c);
+  void clippedTriangle(RendererUnit& unit, const Vertex& a, const Vertex& b, const Vertex& c);
   void triangle(const Vertex& a, const Vertex& b, const Vertex& c);
   bool insideViewFrustrum(const Vertex& v);
   Vector3 barycentric(Vector3& a, Vector3& b, Vector3& c, Vector2& p);
   void clipPolyComponent(std::vector<Vertex>& vertices, int comp, float fac, std::vector<Vertex>& result);
-  bool clipPolyAxis(std::vector<Vertex>& vertices, std::vector<Vertex>& aux, int comp);
+  bool clipPolyAxis(RendererUnit& unit, int comp);
+
+  static void unitExecute(RendererUnit& unit);
 };
 
-Renderer::Renderer() : impl(std::make_shared<RendererImpl>())
-{
-
-}
+Renderer::Renderer() : impl(std::make_shared<RendererImpl>()) { }
 
 void Renderer::setMesh(const Mesh& mesh)
 {
@@ -57,8 +68,12 @@ void Renderer::setTexture(const Texture& texture)
 void Renderer::setTarget(const Texture& target)
 {
   impl->target = target;
-  impl->viewport = Matrix::viewport(0, 0, target.getWidth(), target.getHeight());
-  //impl->viewport = Matrix::viewport(0, 0, target.getWidth(), target.getHeight() - 100);
+
+  impl->viewport = Matrix::viewport(0, 0,
+    target.getWidth(), target.getHeight());
+
+  //impl->viewport = Matrix::viewport(0, 0,
+  //  target.getWidth(), target.getHeight() - 100);
 }
 
 void Renderer::setView(const Matrix& view)
@@ -74,6 +89,18 @@ void Renderer::setModel(const Matrix& model)
 void Renderer::setProjection(const Matrix& projection)
 {
   impl->projection = projection;
+}
+
+void RendererImpl::unitExecute(RendererUnit& unit)
+{
+  for(std::vector<Face>::iterator it = unit.begin;
+    it != unit.end; it++)
+  {
+    unit.impl.lock()->clippedTriangle(unit,
+      it->a.transform(unit.m),
+      it->b.transform(unit.m),
+      it->c.transform(unit.m));
+  }
 }
 
 bool RendererImpl::insideViewFrustrum(const Vertex& v)
@@ -104,23 +131,24 @@ Vector3 RendererImpl::barycentric(Vector3& a, Vector3& b, Vector3& c, Vector2& p
   return r;
 }
 
-bool RendererImpl::clipPolyAxis(std::vector<Vertex>& vertices, std::vector<Vertex>& aux, int comp)
+bool RendererImpl::clipPolyAxis(RendererUnit& unit, int comp)
 {
-  clipPolyComponent(vertices, comp, 1.0f, aux);
-  vertices.clear();
+  clipPolyComponent(unit.vertices, comp, 1.0f, unit.aux);
+  unit.vertices.clear();
 
-  if(aux.size() == 0)
+  if(unit.aux.size() == 0)
   {
     return false;
   }
 
-  clipPolyComponent(aux, comp, -1.0f, vertices);
-  aux.clear();
+  clipPolyComponent(unit.aux, comp, -1.0f, unit.vertices);
+  unit.aux.clear();
 
-  return vertices.size() != 0;
+  return unit.vertices.size() != 0;
 }
 
-void RendererImpl::clipPolyComponent(std::vector<Vertex>& vertices, int comp, float fac, std::vector<Vertex>& result)
+void RendererImpl::clipPolyComponent(std::vector<Vertex>& vertices,
+  int comp, float fac, std::vector<Vertex>& result)
 {
   Vertex previousVertex = vertices.at(vertices.size() - 1);
   float previousComp = previousVertex.getComponent(comp) * fac;
@@ -275,7 +303,7 @@ void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
   }
 }
 
-void RendererImpl::clippedTriangle(const Vertex& a, const Vertex& b, const Vertex& c)
+void RendererImpl::clippedTriangle(RendererUnit& unit, const Vertex& a, const Vertex& b, const Vertex& c)
 {
   if(insideViewFrustrum(a) &&
     insideViewFrustrum(b) &&
@@ -286,23 +314,23 @@ void RendererImpl::clippedTriangle(const Vertex& a, const Vertex& b, const Verte
     return;
   }
 
-  vertices.clear();
-  aux.clear();
+  unit.vertices.clear();
+  unit.aux.clear();
 
-  vertices.push_back(a);
-  vertices.push_back(b);
-  vertices.push_back(c);
+  unit.vertices.push_back(a);
+  unit.vertices.push_back(b);
+  unit.vertices.push_back(c);
 
-  if(clipPolyAxis(vertices, aux, 0) &&
-    clipPolyAxis(vertices, aux, 1) &&
-    clipPolyAxis(vertices, aux, 2))
+  if(clipPolyAxis(unit, 0) &&
+    clipPolyAxis(unit, 1) &&
+    clipPolyAxis(unit, 2))
   {
-    Vertex& initial = vertices.at(0);
+    Vertex& initial = unit.vertices.at(0);
 
-    for(int i = 1; i < vertices.size() - 1; i++)
+    for(int i = 1; i < unit.vertices.size() - 1; i++)
     {
-      Vertex& v1 = vertices.at(i);
-      Vertex& v2 = vertices.at(i + 1);
+      Vertex& v1 = unit.vertices.at(i);
+      Vertex& v2 = unit.vertices.at(i + 1);
       triangle(initial, v1, v2);
     }
   }
@@ -312,14 +340,21 @@ void Renderer::render()
 {
   Matrix m = impl->projection * impl->view * impl->model;
 
-  for(std::vector<Face>::iterator it = impl->mesh.getFaces().begin();
-    it != impl->mesh.getFaces().end(); it++)
+  size_t npt = impl->mesh.getFaces().size() / impl->pool.size();
+  std::vector<Face>::iterator sit = impl->mesh.getFaces().begin();
+
+  for(size_t ui = 0; ui < impl->pool.size(); ui++)
   {
-    impl->clippedTriangle(
-      it->a.transform(m),
-      it->b.transform(m),
-      it->c.transform(m));
+    impl->pool.at(ui).impl = impl;
+    impl->pool.at(ui).m = m;
+    impl->pool.at(ui).begin = sit;
+    impl->pool.at(ui).end = sit + npt;
+
+    sit += npt;
   }
+
+  impl->pool.at(impl->pool.size() - 1).end = impl->mesh.getFaces().end();
+  impl->pool.execute(RendererImpl::unitExecute);
 }
 
 }
