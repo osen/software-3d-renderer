@@ -1,4 +1,4 @@
-#include <memory>
+#include <sr1/memory>
 
 namespace qsoft
 {
@@ -10,7 +10,7 @@ struct Matrix;
 
 class Renderer
 {
-  std::shared_ptr<RendererImpl> impl;
+  std::sr1::shared_ptr<RendererImpl> impl;
 
 public:
   Renderer();

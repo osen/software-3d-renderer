@@ -1,0 +1,163 @@
+#ifndef STD_SR1_WEAKPTR
+#define STD_SR1_WEAKPTR
+
+#include "shared_ptr"
+
+namespace std
+{
+
+namespace sr1
+{
+
+#ifdef STD_SR1_DEBUG
+
+template <typename T>
+class weak_ptr
+{
+public:
+  weak_ptr() : ref(NULL) { }
+
+  weak_ptr& operator=(const weak_ptr& other)
+  {
+    {
+      MUTEX_LOCK
+      aquire(other.ref);
+
+      return *this;
+    }
+  }
+
+  weak_ptr(const weak_ptr& copy) : ref(NULL)
+  {
+    *this = copy;
+  }
+
+  template <typename U>
+  weak_ptr& operator=(const weak_ptr<U>& other)
+  {
+    {
+      MUTEX_LOCK
+      T *t = static_cast<U*>(NULL);
+      aquire(other.ref);
+
+      return *this;
+    }
+  }
+
+  template <typename U>
+  weak_ptr(const weak_ptr<U>& copy) : ref(NULL)
+  {
+    *this = copy;
+  }
+
+  template <typename U>
+  weak_ptr& operator=(const shared_ptr<U>& other)
+  {
+    {
+      MUTEX_LOCK
+      T *t = static_cast<U*>(NULL);
+      aquire(other.ref);
+
+      return *this;
+    }
+  }
+
+  template <typename U>
+  weak_ptr(const shared_ptr<U>& copy) : ref(NULL)
+  {
+    *this = copy;
+  }
+
+  ~weak_ptr()
+  {
+    {
+      MUTEX_LOCK
+      reset();
+    }
+  }
+
+  long use_count()
+  {
+    {
+      MUTEX_LOCK
+      if(!ref) return 0;
+
+      return ref->shared;
+    }
+  }
+
+  shared_ptr<T> lock()
+  {
+    {
+      MUTEX_LOCK
+      shared_ptr<T> rtn;
+
+      if(ref)
+      {
+        if(ref->shared)
+        {
+          rtn.aquire(ref, __m);
+        }
+      }
+
+      return rtn;
+    }
+  }
+
+private:
+  void reset()
+  {
+    if(!ref)
+    {
+      return;
+    }
+
+    ref->weak--;
+
+    if(ref->weak < 1)
+    {
+      if(ref->shared < 1)
+      {
+        delete ref;
+      }
+    }
+
+    ref = NULL;
+  }
+
+  void aquire(shared_ptr_refcount *ref)
+  {
+    if(ref == this->ref)
+    {
+      return;
+    }
+
+    reset();
+
+    if(!ref)
+    {
+      return;
+    }
+
+    this->ref = ref;
+    ref->weak++;
+  }
+
+// TODO: Allow to be private
+public:
+  shared_ptr_refcount *ref;
+
+};
+
+#else
+
+using std::weak_ptr;
+using std::make_shared;
+
+#endif
+
+}
+
+}
+
+#endif

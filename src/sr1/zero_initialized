@@ -1,5 +1,5 @@
-#ifndef ZERO_INITIALIZED_H
-#define ZERO_INITIALIZED_H
+#ifndef STD_SR1_ZERO_INITIALIZED
+#define STD_SR1_ZERO_INITIALIZED
 
 namespace std
 {

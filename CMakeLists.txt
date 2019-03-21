@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 2.6)
 project(QSOFT)
 
 if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")
 else()
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fopenmp")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 endif()
+
+add_definitions(-DSTD_SR1_DEBUG)
 
 include_directories(
   /usr/X11R6/include

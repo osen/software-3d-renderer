@@ -1,5 +1,5 @@
-#ifndef NONCOPYABLE_H
-#define NONCOPYABLE_H
+#ifndef STD_SR1_NONCOPYABLE
+#define STD_SR1_NONCOPYABLE
 
 namespace std
 {
@@ -10,12 +10,12 @@ namespace sr1
 class noncopyable
 {
 private:
-  noncopyable(const noncopyable&) { }
-  const noncopyable& operator=(const noncopyable&) { return *this; }
+  noncopyable(noncopyable const&);
+  noncopyable& operator=(noncopyable const&);
 
 public:
-  noncopyable() { }
-    
+  noncopyable() {}
+
 };
 
 }

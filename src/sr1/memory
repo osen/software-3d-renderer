@@ -1,0 +1,8 @@
+#ifndef STD_SR1_MEMORY
+#define STD_SR1_MEMORY
+
+#include "shared_ptr"
+#include "weak_ptr"
+
+#endif
+

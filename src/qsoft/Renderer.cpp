@@ -25,7 +25,7 @@ struct RendererUnit
 {
   std::vector<Vertex> vertices;
   std::vector<Vertex> aux;
-  std::weak_ptr<RendererImpl> impl;
+  std::sr1::weak_ptr<RendererImpl> impl;
   std::vector<Face>::iterator begin;
   std::vector<Face>::iterator end;
   Matrix m;
@@ -53,7 +53,7 @@ struct RendererImpl
   static void unitExecute(RendererUnit& unit);
 };
 
-Renderer::Renderer() : impl(std::make_shared<RendererImpl>()) { }
+Renderer::Renderer() : impl(std::sr1::make_shared<RendererImpl>()) { }
 
 void Renderer::setMesh(const Mesh& mesh)
 {
@@ -93,10 +93,12 @@ void Renderer::setProjection(const Matrix& projection)
 
 void RendererImpl::unitExecute(RendererUnit& unit)
 {
+  std::sr1::shared_ptr<RendererImpl> impl = unit.impl.lock();
+
   for(std::vector<Face>::iterator it = unit.begin;
     it != unit.end; it++)
   {
-    unit.impl.lock()->clippedTriangle(unit,
+    impl->clippedTriangle(unit,
       it->a.transform(unit.m),
       it->b.transform(unit.m),
       it->c.transform(unit.m));

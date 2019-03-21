@@ -1,0 +1,281 @@
+#ifndef STD_SR1_VECTOR
+#define STD_SR1_VECTOR
+
+#include "zero_initialized"
+
+#include <vector>
+#include <iostream>
+
+#include <stdlib.h>
+
+namespace std
+{
+
+namespace sr1
+{
+
+#ifdef STD_SR1_DEBUG
+
+template <typename T>
+class vector
+{
+  std::vector<T> data;
+  size_t refs;
+
+  void check_valid()
+  {
+    if(refs > 0)
+    {
+      std::cerr << "Attempting to delete active memory" << std::endl;
+      abort();
+    }
+  }
+
+  class vector_lock
+  {
+    friend class vector;
+
+    vector* owner;
+    size_t idx;
+
+    vector_lock() : owner(NULL), idx(0) {}
+
+    operator size_t()
+    {
+      return idx;
+    }
+
+    void setOwner(vector* owner)
+    {
+      this->owner = owner;
+      owner->refs++;
+    }
+
+  public:
+    vector_lock(const size_t& other) : owner(NULL), idx(other) {}
+
+    ~vector_lock()
+    {
+      if(owner)
+      {
+        owner->refs--;
+      }
+    }
+  };
+
+public:
+  vector() : refs(0) { }
+
+  ~vector()
+  {
+    check_valid();
+  }
+
+  vector& operator=(vector const& other)
+  {
+    check_valid();
+    data = other.data;
+
+    return *this;
+  }
+
+  void push_back(T val)
+  {
+    check_valid();
+    data.push_back(val);
+  }
+
+  void clear()
+  {
+    check_valid();
+    data.clear();
+  }
+
+  size_t size()
+  {
+    return data.size();
+  }
+
+
+  class iterator
+  {
+    friend class vector;
+
+    typename std::vector<T>::iterator it;
+    zero_initialized<vector<T>*> parent;
+
+    void check_parent() const
+    {
+      if(!parent)
+      {
+        std::cerr << "Invalid parent" << std::endl;
+        abort();
+      }
+    }
+
+    void check_valid()
+    {
+      check_parent();
+
+      if(it == parent->data.end())
+      {
+        std::cerr << "Invalid iterator" << std::endl;
+        abort();
+      }
+    }
+
+  public:
+    iterator() { }
+
+    iterator(iterator const& other)
+    {
+      *this = other;
+    }
+
+    ~iterator()
+    {
+      if(parent)
+      {
+        parent->refs--;
+      }
+    }
+
+    iterator& operator=(iterator const& other)
+    {
+      if(parent)
+      {
+        parent->refs--;
+      }
+
+      it = other.it;
+      parent = other.parent;
+
+      if(parent)
+      {
+        parent->refs++;
+      }
+
+      return *this;
+    }
+
+    bool operator !=(iterator const& other)
+    {
+      check_parent();
+      other.check_parent();
+
+      if(it != other.it) return true;
+      if(parent != other.parent) return true;
+
+      return false;
+    }
+
+    iterator operator ++(int val)
+    {
+      check_valid();
+      iterator rtn = *this;
+      it ++;
+
+      return rtn;
+    }
+
+    iterator operator +(int val)
+    {
+      iterator rtn = *this;
+
+      while(val)
+      {
+        val--;
+        rtn++;
+      }
+
+      return rtn;
+    }
+
+    T* operator ->()
+    {
+      check_valid();
+      return &(*it);
+    }
+
+    T& operator *()
+    {
+      check_valid();
+      return *it;
+    }
+
+    bool operator ==(const iterator& other)
+    {
+      return it == other.it;
+    }
+  };
+
+  T& at(size_t idx, vector_lock vl = vector_lock())
+  {
+    vl.setOwner(this);
+    return data.at(idx);
+  }
+
+  T& operator [](vector_lock vl)
+  {
+    vl.setOwner(this);
+
+    if(vl >= data.size())
+    {
+      std::cerr << "Attempting to access out of bounds memory" << std::endl;
+      abort();
+    }
+
+    return at(vl);
+  }
+
+  iterator begin()
+  {
+    iterator rtn;
+
+    rtn.it = data.begin();
+    rtn.parent = this;
+    refs++;
+
+    return rtn;
+  }
+
+  iterator end()
+  {
+    iterator rtn;
+
+    rtn.it = data.end();
+    rtn.parent = this;
+    refs++;
+
+    return rtn;
+  }
+
+  iterator erase(iterator& it)
+  {
+    it.check_valid();
+
+    it.parent = NULL;
+
+    refs--;
+    check_valid();
+
+    iterator rtn;
+    rtn.it = data.erase(it.it);
+    rtn.parent = this;
+    refs++;
+
+    return rtn;
+  }
+};
+
+#else
+
+using std::vector;
+
+#endif
+
+}
+
+}
+
+#endif

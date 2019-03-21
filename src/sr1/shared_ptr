@@ -1,0 +1,359 @@
+#ifndef STD_SR1_SHAREDPTR
+#define STD_SR1_SHAREDPTR
+
+#include "zero_initialized"
+
+#include <pthread.h>
+
+#include <iostream>
+
+#include <cstddef>
+
+namespace std
+{
+
+namespace sr1
+{
+
+#ifdef STD_SR1_DEBUG
+
+/*
+#define MUTEX_LOCK \
+  std::cout << "Lock: " << __FILE__ << ":" << __LINE__ << std::endl; \
+  shared_ptr_mutex<> __m;
+*/
+
+#define MUTEX_LOCK \
+  shared_ptr_mutex<> __m;
+
+#define MUTEX_UNLOCK \
+  __m.unlock();
+
+#define MUTEX_RELOCK \
+  __m.lock();
+
+template <typename T = int>
+struct shared_ptr_mutex
+{
+  shared_ptr_mutex()
+  {
+    lock();
+  }
+
+  ~shared_ptr_mutex()
+  {
+    unlock();
+  }
+
+  void unlock()
+  {
+    //std::cout << "Unlock" << std::endl;
+    pthread_mutex_unlock(get());
+  }
+
+  void lock()
+  {
+    pthread_mutex_lock(get());
+    //std::cout << "Lock" << std::endl;
+  }
+
+private:
+  pthread_mutex_t *get()
+  {
+    static pthread_mutex_t rtn = PTHREAD_MUTEX_INITIALIZER;
+    // TODO: Destroy mutex on shutdown
+
+    return &rtn;
+  }
+};
+
+struct shared_ptr_refcount
+{
+  shared_ptr_refcount() : ptr(NULL), deleter(NULL) { }
+
+  zero_initialized<size_t> shared;
+  zero_initialized<size_t> weak;
+  void *ptr;
+  void (*deleter)(void *);
+  pthread_mutex_t mut;
+};
+
+template <typename T>
+void shared_ptr_deleter(void *ptr)
+{
+  T *t = (T *)ptr;
+
+  delete t;
+}
+
+template <typename T>
+class shared_ptr;
+
+template <typename T>
+class shared_ptr_lock
+{
+public:
+  shared_ptr_lock(shared_ptr<T>* owner) : owner(owner)
+  {
+    // TODO: Initializer list parameter with same name as argument
+    // All compilers support this? C++98
+    {
+      MUTEX_LOCK
+      this->owner = owner;
+      owner->locks++;
+    }
+  }
+
+  shared_ptr_lock(const shared_ptr_lock<T>& other) : owner(NULL)
+  {
+    //*this = other;
+    {
+      MUTEX_LOCK
+      if(owner)
+      {
+        owner->locks--;
+      }
+
+      owner = other.owner;
+      owner->locks++;
+    }
+  }
+
+  virtual ~shared_ptr_lock()
+  {
+    {
+      MUTEX_LOCK
+      owner->locks--;
+    }
+  }
+
+protected:
+  shared_ptr<T>* owner;
+
+private:
+  shared_ptr_lock& operator=(const shared_ptr_lock& other)
+  {
+    abort();
+    return *this;
+  }
+/*
+  {
+    {
+      MUTEX_LOCK
+      if(owner)
+      {
+        owner->locks--;
+      }
+
+      owner = other.owner;
+      owner->locks++;
+
+      return *this;
+    }
+  }
+*/
+
+};
+
+template <typename T>
+class shared_ptr_lock_ptr : public shared_ptr_lock<T>
+{
+public:
+  shared_ptr_lock_ptr(shared_ptr<T> *owner) : shared_ptr_lock<T>(owner) { }
+
+  operator T*()
+  {
+    return this->owner->get();
+  }
+
+  T& operator*()
+  {
+    return *this->owner->get();
+  }
+
+  T* operator->()
+  {
+    return this->owner->get();
+  }
+};
+
+template <typename T>
+class shared_ptr_lock_ref : public shared_ptr_lock<T>
+{
+public:
+  shared_ptr_lock_ref(shared_ptr<T> *owner) : shared_ptr_lock<T>(owner) { }
+
+  operator T&()
+  {
+    return *this->owner->get();
+  }
+};
+
+template <typename T>
+class shared_ptr
+{
+  friend class shared_ptr_lock_ptr<T>;
+  friend class shared_ptr_lock_ref<T>;
+
+public:
+  shared_ptr() : ref(NULL), locks(0) { }
+
+  shared_ptr& operator=(const shared_ptr& other)
+  {
+    {
+      MUTEX_LOCK
+      aquire(other.ref, __m);
+
+      return *this;
+    }
+  }
+
+  shared_ptr(const shared_ptr& copy) : ref(NULL), locks(0)
+  {
+    *this = copy;
+  }
+
+  template <typename U>
+  shared_ptr& operator=(const shared_ptr<U>& other)
+  {
+    {
+      MUTEX_LOCK
+      T *t = static_cast<U*>(NULL);
+      aquire(other.ref, __m);
+
+      return *this;
+    }
+  }
+
+  template <typename U>
+  shared_ptr(const shared_ptr<U>& copy) : ref(NULL), locks(0)
+  {
+    {
+      MUTEX_LOCK
+      *this = copy;
+    }
+  }
+
+  ~shared_ptr()
+  {
+    {
+      MUTEX_LOCK
+      reset(__m);
+    }
+  }
+
+  shared_ptr_lock_ptr<T> operator->()
+  {
+    return shared_ptr_lock_ptr<T>(this);
+  }
+
+  shared_ptr_lock_ref<T> operator*()
+  {
+    return shared_ptr_lock_ref<T>(this);
+  }
+
+private:
+  T *get()
+  {
+    T *t = NULL;
+
+    if(ref)
+    {
+      t = (T *)ref->ptr;
+    }
+
+    return t;
+  }
+
+  void reset(shared_ptr_mutex<>& __m)
+  {
+    if(!ref)
+    {
+      return;
+    }
+
+    if(locks)
+    {
+      std::cerr << "Attempt to release locked reference" << std::endl;
+      abort();
+    }
+
+    if(ref->shared == 1)
+    {
+      __m.unlock();
+      ref->deleter(ref->ptr);
+      __m.lock();
+      ref->ptr = NULL;
+
+      if(ref->weak < 1)
+      {
+        delete ref;
+      }
+    }
+    else
+    {
+      ref->shared--;
+    }
+
+    ref = NULL;
+  }
+
+// TODO: Allow the following to be private
+public:
+  shared_ptr_refcount *ref;
+  size_t locks;
+
+  void aquire(shared_ptr_refcount *ref, shared_ptr_mutex<>& __m)
+  {
+    {
+      if(ref == this->ref)
+      {
+        return;
+      }
+
+      // TODO: Increment new reference count before reset of old.
+      reset(__m);
+
+      if(!ref)
+      {
+        return;
+      }
+
+      this->ref = ref;
+      //pthread_mutex_lock(&ref->mut);
+      //shared_ptr_mutex<>(0);
+      ref->shared++;
+      //shared_ptr_mutex<>(1);
+      //pthread_mutex_unlock(&ref->mut);
+    }
+  }
+
+};
+
+template <typename T>
+shared_ptr<T> make_shared()
+{
+  MUTEX_LOCK
+  shared_ptr<T> rtn;
+
+  shared_ptr_refcount *ref = new shared_ptr_refcount();
+  ref->ptr = new T();
+  ref->deleter = shared_ptr_deleter<T>;
+  ref->mut = PTHREAD_MUTEX_INITIALIZER;
+  rtn.aquire(ref, __m);
+
+  return rtn;
+}
+
+#else
+
+using std::shared_ptr;
+using std::make_shared;
+
+#endif
+
+}
+
+}
+
+#endif
