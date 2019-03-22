@@ -75,7 +75,6 @@ struct shared_ptr_refcount
   zero_initialized<size_t> weak;
   void *ptr;
   void (*deleter)(void *);
-  pthread_mutex_t mut;
 };
 
 template <typename T>
@@ -228,10 +227,7 @@ public:
   template <typename U>
   shared_ptr(const shared_ptr<U>& copy) : ref(NULL), locks(0)
   {
-    {
-      MUTEX_LOCK
-      *this = copy;
-    }
+    *this = copy;
   }
 
   ~shared_ptr()
@@ -244,6 +240,7 @@ public:
 
   shared_ptr_lock_ptr<T> operator->()
   {
+    // TODO: Seems a bit cleaner putting mutex here rather than lock class.
     return shared_ptr_lock_ptr<T>(this);
   }
 
@@ -320,11 +317,7 @@ public:
       }
 
       this->ref = ref;
-      //pthread_mutex_lock(&ref->mut);
-      //shared_ptr_mutex<>(0);
       ref->shared++;
-      //shared_ptr_mutex<>(1);
-      //pthread_mutex_unlock(&ref->mut);
     }
   }
 
@@ -339,7 +332,6 @@ shared_ptr<T> make_shared()
   shared_ptr_refcount *ref = new shared_ptr_refcount();
   ref->ptr = new T();
   ref->deleter = shared_ptr_deleter<T>;
-  ref->mut = PTHREAD_MUTEX_INITIALIZER;
   rtn.aquire(ref, __m);
 
   return rtn;
