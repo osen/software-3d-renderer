@@ -102,7 +102,7 @@ public:
     friend class vector;
 
     typename std::vector<T>::iterator it;
-    zero_initialized<vector<T>*> parent;
+    zero_initialized<vector<T> *> parent;
 
     void check_parent() const
     {

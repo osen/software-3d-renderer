@@ -15,6 +15,7 @@ private:
 
 public:
   zero_initialized() : m_data(0) { }
+  zero_initialized(const T& t) : m_data(t) { }
 
   T& operator=(const T& t)
   {
@@ -22,22 +23,14 @@ public:
     return m_data;
   }
 
-/*
-  T& operator=(T& t)
-  {
-    m_data = t;
-    return m_data;
-  }
-*/
-
   T& data() { return m_data; }
 
-  operator const T&() const
+  operator T&()
   {
     return m_data;
   }
 
-  operator T&()
+  operator const T&() const
   {
     return m_data;
   }
@@ -46,13 +39,6 @@ public:
   {
     return m_data;
   }
-
-/*
-  const T& operator->() const
-  {
-    return m_data;
-  }
-*/
 
 };
 
