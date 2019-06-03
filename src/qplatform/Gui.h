@@ -18,6 +18,13 @@ class Gui
 
 public:
   void image(qsoft::Vector2 position, std::shared_ptr<Texture> texture);
-  void image(qsoft::Vector2 position, std::shared_ptr<Texture> texture, qsoft::Vector4 clip);
+
+  void image(qsoft::Vector2 position, std::shared_ptr<Texture> texture,
+    qsoft::Vector4 clip);
+
+  void image(qsoft::Vector4 position, std::shared_ptr<Texture> texture,
+    qsoft::Vector4 clip);
+
+  void rectangle(qsoft::Vector4 rect, const qsoft::Color& color);
 
 };

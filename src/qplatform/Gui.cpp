@@ -32,7 +32,8 @@ void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture)
   }
 }
 
-void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture, qsoft::Vector4 clip)
+void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture,
+  qsoft::Vector4 clip)
 {
   std::shared_ptr<qsoft::Texture> buffer = platform.lock()->getWindow()->getBuffer();
 
@@ -45,6 +46,51 @@ void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture, qsoft
       if(p.a != 255) continue;
 
       buffer->setPixel(position.x + (x - clip.x), position.y + (y - clip.y), p);
+    }
+  }
+}
+
+void Gui::rectangle(qsoft::Vector4 rect, const qsoft::Color& color)
+{
+  std::shared_ptr<qsoft::Texture> buffer =
+    platform.lock()->getWindow()->getBuffer();
+
+  for(size_t y = 0; y < rect.w; y++)
+  {
+    for(size_t x = 0; x < rect.z; x++)
+    {
+      buffer->setPixel(rect.x + x, rect.y + y, color);
+    }
+  }
+}
+
+void Gui::image(qsoft::Vector4 position, std::shared_ptr<Texture> texture,
+  qsoft::Vector4 clip)
+{
+  std::shared_ptr<qsoft::Texture> buffer =
+    platform.lock()->getWindow()->getBuffer();
+
+  float scaleX = position.z / clip.z;
+  float scaleY = position.w / clip.w;
+
+  for(size_t y = clip.y; y < clip.y + clip.w; y++)
+  {
+    for(size_t x = clip.x; x < clip.x + clip.z; x++)
+    {
+      qsoft::Color p = texture->getPixel(x, y);
+
+      if(p.a != 255) continue;
+
+      qsoft::Vector4 v(position.x + (x - clip.x) * scaleX,
+        position.y + (y - clip.y) * scaleY, scaleX, scaleY);
+
+      for(size_t yp = 0; yp < v.w; yp++)
+      {
+        for(size_t xp = 0; xp < v.z; xp++)
+        {
+          buffer->setPixel(v.x + xp, v.y + yp, p);
+        }
+      }
     }
   }
 }

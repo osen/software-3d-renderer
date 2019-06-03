@@ -152,7 +152,17 @@ void Player::onGui()
     getWindow()->getBuffer()->getWidth() / 2.0f - clip.z / 2.0f,
     getWindow()->getBuffer()->getHeight() - clip.w);
 
-  getGui()->image(pos, pitchfork, clip);
+  float ratioX = (float)getWindow()->getBuffer()->getWidth() /
+    (float)getWindow()->getWidth();
+
+  float ratioY = (float)getWindow()->getBuffer()->getHeight() /
+    (float)getWindow()->getHeight();
+
+  Vector4 wpos(0, 0, clip.z * 3 * ratioX, clip.w * 3 * ratioY);
+  wpos.x = getWindow()->getBuffer()->getWidth() / 2.0f - wpos.z / 2.0f;
+  wpos.y = getWindow()->getBuffer()->getHeight() - wpos.w;
+
+  getGui()->image(wpos, pitchfork, clip);
   clip = Vector4(0, 0, heart->getWidth(), heart->getHeight());
 
   for(int i = 0; i < 4; i++)
@@ -166,3 +176,4 @@ void Player::onGui()
     getGui()->image(pos, heart);
   }
 }
+
