@@ -30,7 +30,8 @@ void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture)
 void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture,
   qsoft::Vector4 clip)
 {
-  image(position, texture, clip);
+  image(qsoft::Vector4(position.x, position.y,
+    texture->getWidth(), texture->getHeight()), texture, clip);
 }
 
 void Gui::rectangle(qsoft::Vector4 rect, const qsoft::Color& color)

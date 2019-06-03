@@ -6,6 +6,10 @@
 
 #include <iostream>
 
+#ifndef STD_SR1_DEBUG
+  #include <memory>
+#endif
+
 #include <cstddef>
 #include <cstdlib>
 

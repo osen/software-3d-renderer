@@ -1,7 +1,7 @@
 #include "Sound.h"
 #include "Exception.h"
 
-#include <vorbis/vorbisfile.h>
+#include <stb_vorbis/stb_vorbis.cpp>
 
 void Sound::onLoad(std::string path)
 {
@@ -25,24 +25,20 @@ Sound::~Sound()
 void Sound::loadOgg(std::string fileName, std::vector<char> &buffer,
   ALenum &format, ALsizei &freq)
 {
-  int endian = 0;
-  int bitStream = 0;
-  long bytes = 0;
-  char array[2048] = {0};
-  vorbis_info *pInfo = NULL;
-  OggVorbis_File oggFile = {0};
+  int channels = 0;
+  int sampleRate = 0;
+  short *output = NULL;
 
-  // Use the inbuilt fopen to create a file descriptor
-  if(ov_fopen(fileName.c_str(), &oggFile) != 0)
+  size_t samples = stb_vorbis_decode_filename(
+    fileName.c_str(), &channels, &sampleRate, &output);
+
+  if(samples == -1)
   {
     throw Exception("Failed to open file '" + fileName + "' for decoding");
   }
 
-  // Extract information from the file header
-  pInfo = ov_info(&oggFile, -1);
-
   // Record the format required by OpenAL
-  if(pInfo->channels == 1)
+  if(channels == 1)
   {
     format = AL_FORMAT_MONO16;
   }
@@ -52,28 +48,11 @@ void Sound::loadOgg(std::string fileName, std::vector<char> &buffer,
   }
 
   // Record the sample rate required by OpenAL
-  freq = pInfo->rate;
+  freq = sampleRate;
 
-  // Keep reading bytes from the file to populate the output buffer
-  while(true)
-  {
-    // Read bytes into temporary array
-    bytes = ov_read(&oggFile, array, 2048, endian, 2, 1, &bitStream);
+  buffer.resize(samples * 2);
+  memcpy(&buffer.at(0), output, buffer.size());
 
-    if(bytes < 0)
-    {
-      ov_clear(&oggFile);
-      throw ("Failed to decode file '" + fileName + "'.");
-    }
-    else if(bytes == 0)
-    {
-      break;
-    }
-
-    // Copy from temporary array into output buffer
-    buffer.insert(buffer.end(), array, array + bytes);
-  }
-
-  // Clean up and close the file
-  ov_clear(&oggFile);
+  // Clean up the read data
+  free(output);
 }

@@ -39,8 +39,8 @@ Color Texture::getPixel(int x, int y)
     throw std::exception();
   }
 
-  return *(impl->data.begin() + y * impl->width + x);
-  //return impl->data.at(y * impl->width + x);
+  //return *(impl->data.begin() + y * impl->width + x);
+  return impl->data.at(y * impl->width + x);
 }
 
 void Texture::setPixel(int x, int y, const Color& color)
@@ -55,8 +55,8 @@ void Texture::setPixel(int x, int y, const Color& color)
     return;
   }
 
-  *(impl->data.begin() + y * impl->width + x) = color;
-  //impl->data.at(y * impl->width + x) = color;
+  //*(impl->data.begin() + y * impl->width + x) = color;
+  impl->data.at(y * impl->width + x) = color;
 }
 
 int Texture::getWidth() const

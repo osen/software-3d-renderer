@@ -5,6 +5,7 @@
 #include <AL/al.h>
 
 #include <sr1/zero_initialized>
+#include <sr1/noncopyable>
 
 #include <memory>
 #include <string>
@@ -12,7 +13,7 @@
 
 class Audio;
 
-class Sound : public Resource
+class Sound : public Resource, public std::sr1::noncopyable
 {
   friend class Audio;
 

@@ -8,14 +8,12 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 endif()
 
-add_definitions(-DSTD_SR1_DEBUG)
+#add_definitions(-DSTD_SR1_DEBUG)
 
 if(WIN32)
   include_directories(
     ${PROJECT_SOURCE_DIR}/contrib/SDL2/include
     ${PROJECT_SOURCE_DIR}/contrib/openal-soft/include
-    ${PROJECT_SOURCE_DIR}/contrib/ogg/include
-    ${PROJECT_SOURCE_DIR}/contrib/vorbis/include
   )
 else()
   include_directories(
@@ -28,8 +26,6 @@ if(WIN32)
   link_directories(
     ${PROJECT_SOURCE_DIR}/contrib/SDL2/lib
     ${PROJECT_SOURCE_DIR}/contrib/openal-soft/lib
-    ${PROJECT_SOURCE_DIR}/contrib/ogg/lib
-    ${PROJECT_SOURCE_DIR}/contrib/vorbis/lib
   )
 else()
   link_directories(
@@ -91,9 +87,9 @@ add_library(qplatform
 )
 
 if(MSVC)
-  target_link_libraries(qplatform qsoft SDL2 openal32 ogg vorbis vorbisfile)
+  target_link_libraries(qplatform qsoft SDL2 openal32)
 else()
-  target_link_libraries(qplatform qsoft SDL2 openal ogg vorbis vorbisfile)
+  target_link_libraries(qplatform qsoft SDL2 openal)
 endif()
 
 add_executable(blood
