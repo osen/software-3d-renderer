@@ -5,31 +5,43 @@ if(MSVC)
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")
 else()
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fopenmp")
-  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 endif()
 
 add_definitions(-DSTD_SR1_DEBUG)
 
+if(WIN32)
+  include_directories(
+    ${PROJECT_SOURCE_DIR}/contrib/SDL2/include
+    ${PROJECT_SOURCE_DIR}/contrib/openal-soft/include
+    ${PROJECT_SOURCE_DIR}/contrib/ogg/include
+    ${PROJECT_SOURCE_DIR}/contrib/vorbis/include
+  )
+else()
+  include_directories(
+    /usr/X11R6/include
+    /usr/local/include
+  )
+endif()
+
+if(WIN32)
+  link_directories(
+    ${PROJECT_SOURCE_DIR}/contrib/SDL2/lib
+    ${PROJECT_SOURCE_DIR}/contrib/openal-soft/lib
+    ${PROJECT_SOURCE_DIR}/contrib/ogg/lib
+    ${PROJECT_SOURCE_DIR}/contrib/vorbis/lib
+  )
+else()
+  link_directories(
+    /usr/X11R6/lib
+    /usr/local/lib
+  )
+endif()
+
 include_directories(
-  /usr/X11R6/include
-  /usr/local/include
-  ${PROJECT_SOURCE_DIR}/contrib/SDL2/include
-  ${PROJECT_SOURCE_DIR}/contrib/openal-soft/include
-  ${PROJECT_SOURCE_DIR}/contrib/ogg/include
-  ${PROJECT_SOURCE_DIR}/contrib/vorbis/include
+  src
   ${PROJECT_SOURCE_DIR}/contrib
 )
-
-link_directories(
-  /usr/X11R6/lib
-  /usr/local/lib
-  ${PROJECT_SOURCE_DIR}/contrib/SDL2/lib
-  ${PROJECT_SOURCE_DIR}/contrib/openal-soft/lib
-  ${PROJECT_SOURCE_DIR}/contrib/ogg/lib
-  ${PROJECT_SOURCE_DIR}/contrib/vorbis/lib
-)
-
-include_directories(src)
 
 if(MSVC)
   add_definitions(-DSDL_MAIN_HANDLED)

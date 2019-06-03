@@ -1,4 +1,4 @@
-#include <memory>
+#include <sr1/memory>
 #include <vector>
 
 namespace qsoft
@@ -9,7 +9,7 @@ struct Face;
 
 class Mesh
 {
-  std::shared_ptr<MeshImpl> impl;
+  std::sr1::shared_ptr<MeshImpl> impl;
 
 public:
   Mesh();

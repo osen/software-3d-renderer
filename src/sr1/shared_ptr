@@ -4,11 +4,10 @@
 #include "zero_initialized"
 #include "noncopyable"
 
-#include <pthread.h>
-
 #include <iostream>
 
 #include <cstddef>
+#include <cstdlib>
 
 namespace std
 {
@@ -17,39 +16,6 @@ namespace sr1
 {
 
 #ifdef STD_SR1_DEBUG
-
-template <typename T = int>
-struct shared_ptr_mutex
-{
-  shared_ptr_mutex()
-  {
-    lock();
-  }
-
-  ~shared_ptr_mutex()
-  {
-    unlock();
-  }
-
-  void unlock()
-  {
-    pthread_mutex_unlock(get());
-  }
-
-  void lock()
-  {
-    pthread_mutex_lock(get());
-  }
-
-private:
-  pthread_mutex_t *get()
-  {
-    static pthread_mutex_t rtn = PTHREAD_MUTEX_INITIALIZER;
-    // TODO: Destroy mutex on shutdown
-
-    return &rtn;
-  }
-};
 
 struct shared_ptr_refcount
 {
@@ -76,21 +42,17 @@ class shared_ptr_lock
 public:
   shared_ptr_lock(shared_ptr<T>* owner)
   {
-    shared_ptr_mutex<> m;
     this->owner = owner;
     owner->locks++;
   }
 
   virtual ~shared_ptr_lock()
   {
-    shared_ptr_mutex<> m;
     owner->locks--;
   }
 
   shared_ptr_lock& operator=(const shared_ptr_lock& other)
   {
-    shared_ptr_mutex<> m;
-
     if(owner) owner->locks--;
     owner = other.owner;
     owner->locks++;
@@ -163,8 +125,7 @@ public:
 
   shared_ptr& operator=(const shared_ptr& other)
   {
-    shared_ptr_mutex<> m;
-    aquire(other.ref, m);
+    aquire(other.ref);
 
     return *this;
   }
@@ -177,9 +138,8 @@ public:
   template <typename U>
   shared_ptr& operator=(const shared_ptr<U>& other)
   {
-    shared_ptr_mutex<> m;
     T *t = static_cast<U*>(NULL);
-    aquire(other.ref, m);
+    aquire(other.ref);
 
     return *this;
   }
@@ -192,13 +152,12 @@ public:
 
   ~shared_ptr()
   {
-    shared_ptr_mutex<> m;
-    reset(m);
+    reset();
   }
 
-  shared_ptr_lock_ptr<T> operator->()
+  shared_ptr_lock_ptr<T> operator->() const
   {
-    return shared_ptr_lock_ptr<T>(this);
+    return shared_ptr_lock_ptr<T>(const_cast<shared_ptr<T> *>(this));
   }
 
   shared_ptr_lock_ref<T> operator*()
@@ -206,8 +165,9 @@ public:
     return shared_ptr_lock_ref<T>(this);
   }
 
-private:
   mutable zero_initialized<shared_ptr_refcount *> ref;
+
+private:
   zero_initialized<size_t> locks;
 
   T *get()
@@ -220,7 +180,7 @@ private:
     return NULL;
   }
 
-  void reset(shared_ptr_mutex<>& m)
+  void reset()
   {
     if(!ref)
     {
@@ -235,14 +195,12 @@ private:
 
     if(ref->shared == 1)
     {
-      m.unlock();
       ref->deleter.data()(ref->ptr);
-      m.lock();
       ref->ptr = NULL;
 
       if(ref->weak < 1)
       {
-        delete ref;
+        delete ref.data();
       }
     }
     else
@@ -253,7 +211,7 @@ private:
     ref = NULL;
   }
 
-  void aquire(shared_ptr_refcount *ref, shared_ptr_mutex<>& m)
+  void aquire(shared_ptr_refcount *ref)
   {
     if(ref == this->ref)
     {
@@ -265,7 +223,7 @@ private:
       ref->shared++;
     }
 
-    reset(m);
+    reset();
 
     if(!ref)
     {
@@ -280,13 +238,12 @@ private:
 template <typename T>
 shared_ptr<T> make_shared()
 {
-  shared_ptr_mutex<> m;
   shared_ptr<T> rtn;
 
   shared_ptr_refcount *ref = new shared_ptr_refcount();
   ref->ptr = new T();
   ref->deleter = shared_ptr_deleter<T>;
-  rtn.aquire(ref, m);
+  rtn.aquire(ref);
 
   return rtn;
 }

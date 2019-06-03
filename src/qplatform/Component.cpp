@@ -61,7 +61,7 @@ std::shared_ptr<Environment> Component::getEnvironment()
   return getPlatform()->getEnvironment();
 }
 
-std::shared_ptr<Gui> Component::getGui()
+std::sr1::shared_ptr<Gui> Component::getGui()
 {
   return getPlatform()->getGui();
 }
@@ -71,7 +71,7 @@ std::shared_ptr<Keyboard> Component::getKeyboard()
   return getPlatform()->getKeyboard();
 }
 
-std::shared_ptr<Audio> Component::getAudio()
+std::sr1::shared_ptr<Audio> Component::getAudio()
 {
   return getPlatform()->getAudio();
 }

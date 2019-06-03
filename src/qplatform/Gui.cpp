@@ -3,9 +3,9 @@
 #include "Platform.h"
 #include "Window.h"
 
-std::shared_ptr<Gui> Gui::initialize(std::shared_ptr<Platform> platform)
+std::sr1::shared_ptr<Gui> Gui::initialize(std::shared_ptr<Platform> platform)
 {
-  std::shared_ptr<Gui> rtn = std::make_shared<Gui>();
+  std::sr1::shared_ptr<Gui> rtn = std::sr1::make_shared<Gui>();
   rtn->platform = platform;
 
   return rtn;

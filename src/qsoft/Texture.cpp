@@ -18,7 +18,7 @@ struct TextureImpl
 
 Texture::Texture() { }
 
-Texture::Texture(int width, int height) : impl(std::make_shared<TextureImpl>())
+Texture::Texture(int width, int height) : impl(std::sr1::make_shared<TextureImpl>())
 {
   impl->data.resize(width * height);
   impl->depthBuffer.resize(width * height);

@@ -1,5 +1,7 @@
 #include <qsoft/qsoft.h>
 
+#include <sr1/memory>
+
 #include <memory>
 
 class Platform;
@@ -9,7 +11,9 @@ class Gui
 {
   friend class Platform;
 
-  static std::shared_ptr<Gui> initialize(std::shared_ptr<Platform> platform);
+  static std::sr1::shared_ptr<Gui> initialize(
+    std::shared_ptr<Platform> platform);
+
   std::weak_ptr<Platform> platform;
 
 public:

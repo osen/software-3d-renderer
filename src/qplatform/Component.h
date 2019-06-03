@@ -2,6 +2,7 @@
 #define QPLATFORM_COMPONENT_H
 
 #include <sr1/noncopyable>
+#include <sr1/memory>
 
 #include <memory>
 
@@ -29,8 +30,8 @@ public:
   std::shared_ptr<Resources> getResources();
   std::shared_ptr<Entity> getEntity();
   std::shared_ptr<Transform> getTransform();
-  std::shared_ptr<Gui> getGui();
-  std::shared_ptr<Audio> getAudio();
+  std::sr1::shared_ptr<Gui> getGui();
+  std::sr1::shared_ptr<Audio> getAudio();
 
 private:
   virtual void onInit();

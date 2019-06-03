@@ -1,4 +1,4 @@
-#include <memory>
+#include <sr1/memory>
 
 namespace qsoft
 {
@@ -8,7 +8,7 @@ struct Color;
 
 class Texture
 {
-  std::shared_ptr<TextureImpl> impl;
+  std::sr1::shared_ptr<TextureImpl> impl;
 
 public:
   Texture();

@@ -11,7 +11,7 @@ struct MeshImpl
   std::vector<Face> faces;
 };
 
-Mesh::Mesh() : impl(std::make_shared<MeshImpl>())
+Mesh::Mesh() : impl(std::sr1::make_shared<MeshImpl>())
 {
 
 }

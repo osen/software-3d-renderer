@@ -1,4 +1,9 @@
 //#define THREADPOOL_DISABLE
+
+#ifdef STD_SR1_DEBUG
+  #define THREADPOOL_DISABLE
+#endif
+
 #define THREADPOOL_THREADS 4
 
 #ifndef THREADPOOL_DISABLE

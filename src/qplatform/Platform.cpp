@@ -138,12 +138,12 @@ std::shared_ptr<Environment> Platform::getEnvironment()
   return environment;
 }
 
-std::shared_ptr<Gui> Platform::getGui()
+std::sr1::shared_ptr<Gui> Platform::getGui()
 {
   return gui;
 }
 
-std::shared_ptr<Audio> Platform::getAudio()
+std::sr1::shared_ptr<Audio> Platform::getAudio()
 {
   return audio;
 }
