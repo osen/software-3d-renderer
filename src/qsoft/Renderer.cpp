@@ -77,13 +77,9 @@ void Renderer::setTarget(const Texture& target)
   impl->target = target;
 
   impl->viewport = Matrix::viewport(0, 0,
-    //target.getWidth(), target.getHeight());
-    target.getWidth(), 200);
+    target.getWidth(), target.getHeight());
 
-  impl->viewportSize = Vector2(target.getWidth(), 200);
-
-  //impl->viewport = Matrix::viewport(0, 0,
-  //  target.getWidth(), target.getHeight() - 100);
+  impl->viewportSize = Vector2(target.getWidth(), target.getHeight());
 }
 
 void Renderer::setView(const Matrix& view)

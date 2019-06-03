@@ -1,3 +1,6 @@
+#ifndef QPLATFORM_PLATFORM_H
+#define QPLATFORM_PLATFORM_H
+
 #include <SDL2/SDL.h>
 
 #include <sr1/noncopyable>
@@ -41,3 +44,5 @@ public:
   std::sr1::shared_ptr<Audio> getAudio();
 
 };
+
+#endif

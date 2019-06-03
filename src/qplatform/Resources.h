@@ -1,12 +1,13 @@
 #include "Resource.h"
 #include "Exception.h"
+#include "Environment.h"
+#include "Platform.h"
 
 #include <vector>
 #include <memory>
 #include <string>
 #include <iostream>
 
-class Platform;
 class Texture;
 
 class Resources
@@ -17,9 +18,14 @@ public:
   template <typename T>
   std::shared_ptr<T> load(std::string path)
   {
+    if(path.find(platform.lock()->getEnvironment()->getDataPath() + "/") != 0)
+    {
+      path = platform.lock()->getEnvironment()->getDataPath() + "/" + path;
+    }
+
     for(size_t i = 0; i < resources.size(); i++)
     {
-      if(resources.at(i)->getPath() == path)
+      if(resources.at(i)->getPath() == platform.lock()->getEnvironment()->getDataPath() + "/" + path)
       {
         std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(resources.at(i));
 
