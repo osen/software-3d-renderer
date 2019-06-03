@@ -14,6 +14,8 @@ class Gui
   static std::sr1::shared_ptr<Gui> initialize(
     std::shared_ptr<Platform> platform);
 
+  qsoft::Vector2 getRatio();
+
   std::weak_ptr<Platform> platform;
 
 public:
@@ -21,6 +23,8 @@ public:
 
   void image(qsoft::Vector2 position, std::shared_ptr<Texture> texture,
     qsoft::Vector4 clip);
+
+  void image(qsoft::Vector4 position, std::shared_ptr<Texture> texture);
 
   void image(qsoft::Vector4 position, std::shared_ptr<Texture> texture,
     qsoft::Vector4 clip);

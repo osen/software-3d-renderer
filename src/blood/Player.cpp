@@ -148,32 +148,26 @@ void Player::onGui()
   clip.x = clip.z * (int)attack;
   //std::cout << clip.x << std::endl;
 
-  Vector2 pos(
-    getWindow()->getBuffer()->getWidth() / 2.0f - clip.z / 2.0f,
-    getWindow()->getBuffer()->getHeight() - clip.w);
+  float idealSize = getWindow()->getHeight() / 3.0f;
 
-  float ratioX = (float)getWindow()->getBuffer()->getWidth() /
-    (float)getWindow()->getWidth();
+  Vector4 wpos(0, 0, idealSize, 0);
+  wpos.w = (idealSize / clip.z) * clip.w;
+  wpos.x = getWindow()->getWidth() / 2.0f - wpos.z / 2.0f;
+  wpos.y = getWindow()->getHeight() - wpos.w;
 
-  float ratioY = (float)getWindow()->getBuffer()->getHeight() /
-    (float)getWindow()->getHeight();
-
-  Vector4 wpos(0, 0, clip.z * 3 * ratioX, clip.w * 3 * ratioY);
-  wpos.x = getWindow()->getBuffer()->getWidth() / 2.0f - wpos.z / 2.0f;
-  wpos.y = getWindow()->getBuffer()->getHeight() - wpos.w;
+  //std::cout << wpos.z / clip.z << std::endl;
 
   getGui()->image(wpos, pitchfork, clip);
-  clip = Vector4(0, 0, heart->getWidth(), heart->getHeight());
 
   for(int i = 0; i < 4; i++)
   {
     if(health <= i * 25) break;
 
-    pos = Vector2(
-      10 + i * clip.z,
-      getWindow()->getBuffer()->getHeight() - 10 - clip.w);
+    clip = Vector4(0, 0, heart->getWidth() * 3, heart->getHeight() * 3);
+    clip.x = 10 + i * clip.z;
+    clip.y = getWindow()->getHeight() - 10 - clip.w;
 
-    getGui()->image(pos, heart);
+    getGui()->image(clip, heart);
   }
 }
 

@@ -11,43 +11,26 @@ std::sr1::shared_ptr<Gui> Gui::initialize(std::shared_ptr<Platform> platform)
   return rtn;
 }
 
+
+void Gui::image(qsoft::Vector4 position, std::shared_ptr<Texture> texture)
+{
+  image(position,
+    texture,
+    qsoft::Vector4(0, 0, texture->getWidth(), texture->getHeight()));
+}
+
 void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture)
 {
-  std::shared_ptr<qsoft::Texture> buffer = platform.lock()->getWindow()->getBuffer();
-
-  for(size_t y = 0; y < texture->getHeight(); y++)
-  {
-    for(size_t x = 0; x < texture->getWidth(); x++)
-    {
-      qsoft::Color p = texture->getPixel(x, y);
-      //qsoft::Color curr = buffer->getPixel(position.x + x, position.y + y);
-
-      //p.r = (curr.r + (p.r * p.a / 255)) / 2;
-      //p.g = (curr.g + (p.g * p.a / 255)) / 2;
-      //p.b = (curr.b + (p.b * p.a / 255)) / 2;
-      if(p.a != 255) continue;
-
-      buffer->setPixel(position.x + x, position.y + y, p);
-    }
-  }
+  image(qsoft::Vector4(position.x, position.y,
+    texture->getWidth(), texture->getHeight()),
+    texture,
+    qsoft::Vector4(0, 0, texture->getWidth(), texture->getHeight()));
 }
 
 void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture,
   qsoft::Vector4 clip)
 {
-  std::shared_ptr<qsoft::Texture> buffer = platform.lock()->getWindow()->getBuffer();
-
-  for(size_t y = clip.y; y < clip.y + clip.w; y++)
-  {
-    for(size_t x = clip.x; x < clip.x + clip.z; x++)
-    {
-      qsoft::Color p = texture->getPixel(x, y);
-
-      if(p.a != 255) continue;
-
-      buffer->setPixel(position.x + (x - clip.x), position.y + (y - clip.y), p);
-    }
-  }
+  image(position, texture, clip);
 }
 
 void Gui::rectangle(qsoft::Vector4 rect, const qsoft::Color& color)
@@ -64,11 +47,26 @@ void Gui::rectangle(qsoft::Vector4 rect, const qsoft::Color& color)
   }
 }
 
+qsoft::Vector2 Gui::getRatio()
+{
+  std::shared_ptr<Window> w = platform.lock()->getWindow();
+
+  return qsoft::Vector2(
+    (float)w->getBuffer()->getWidth() / (float)w->getWidth(),
+    (float)w->getBuffer()->getHeight() / (float)w->getHeight());
+}
+
 void Gui::image(qsoft::Vector4 position, std::shared_ptr<Texture> texture,
   qsoft::Vector4 clip)
 {
   std::shared_ptr<qsoft::Texture> buffer =
     platform.lock()->getWindow()->getBuffer();
+
+  qsoft::Vector2 r = getRatio();
+  position.x *= r.x;
+  position.y *= r.y;
+  position.z *= r.x;
+  position.w *= r.y;
 
   float scaleX = position.z / clip.z;
   float scaleY = position.w / clip.w;

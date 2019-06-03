@@ -40,6 +40,7 @@ struct RendererImpl
   Matrix projection;
   Texture target;
   Matrix viewport;
+  Vector2 viewportSize;
 
   ThreadPool<RendererUnit> pool;
 
@@ -54,6 +55,12 @@ struct RendererImpl
 };
 
 Renderer::Renderer() : impl(std::sr1::make_shared<RendererImpl>()) { }
+
+void Renderer::setViewport(int x, int y, int width, int height)
+{
+  impl->viewport = Matrix::viewport(x, y, width, height);
+  impl->viewportSize = Vector2(width + x, height + y);
+}
 
 void Renderer::setMesh(const Mesh& mesh)
 {
@@ -70,7 +77,10 @@ void Renderer::setTarget(const Texture& target)
   impl->target = target;
 
   impl->viewport = Matrix::viewport(0, 0,
-    target.getWidth(), target.getHeight());
+    //target.getWidth(), target.getHeight());
+    target.getWidth(), 200);
+
+  impl->viewportSize = Vector2(target.getWidth(), 200);
 
   //impl->viewport = Matrix::viewport(0, 0,
   //  target.getWidth(), target.getHeight() - 100);
@@ -185,7 +195,7 @@ void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
 {
   Vector2 bboxmin( std::numeric_limits<float>::max(),  std::numeric_limits<float>::max());
   Vector2 bboxmax(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
-  Vector2 clamp(target.getWidth() - 1, target.getHeight() - 1);
+  Vector2 clamp(viewportSize.x - 1, viewportSize.y - 1);
 
   Vertex pts[3] =
   {
@@ -217,7 +227,7 @@ void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
     bboxmax.y = std::min(clamp.y, std::max(bboxmax.y, pts2[i].y));
   }
 
-  float sz = (float)std::max(target.getWidth(), target.getHeight());
+  float sz = (float)std::max((int)viewportSize.x, (int)viewportSize.y);
   float bcsoff = -0.01f / sz;
   int cp = bboxmax.y + 1;
 

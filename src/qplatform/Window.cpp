@@ -9,6 +9,7 @@ std::shared_ptr<Window> Window::initialize()
   rtn->height = DEFAULT_WINDOW_HEIGHT;
 
   rtn->buffer = std::make_shared<qsoft::Texture>(320, 240);
+  //rtn->buffer = std::make_shared<qsoft::Texture>(320, 200);
   //rtn->buffer = std::make_shared<qsoft::Texture>(640, 480);
   rtn->renderer = std::make_shared<qsoft::Renderer>();
   rtn->renderer->setTarget(*rtn->buffer);

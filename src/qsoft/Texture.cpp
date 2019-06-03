@@ -45,6 +45,16 @@ Color Texture::getPixel(int x, int y)
 
 void Texture::setPixel(int x, int y, const Color& color)
 {
+  if(x < 0 || y < 0)
+  {
+    return;
+  }
+
+  if(x >= impl->width || y >= impl->height)
+  {
+    return;
+  }
+
   *(impl->data.begin() + y * impl->width + x) = color;
   //impl->data.at(y * impl->width + x) = color;
 }

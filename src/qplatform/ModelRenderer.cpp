@@ -10,6 +10,8 @@
 #include "Transform.h"
 #include "Camera.h"
 
+#define VISIBLE_HEIGHT 210
+
 void ModelRenderer::onInit() { }
 
 void ModelRenderer::onInit(std::shared_ptr<Model> model)
@@ -32,7 +34,11 @@ void ModelRenderer::onDisplay()
 {
   std::shared_ptr<qsoft::Renderer> r = getPlatform()->getWindow()->getRenderer();
   std::shared_ptr<Window> w = getWindow();
-  r->setProjection(qsoft::Matrix::perspective(65.0f, (float)w->getWidth() / (float)w->getHeight(), 0.01f, 100.0f));
+  //r->setProjection(qsoft::Matrix::perspective(65.0f, (float)w->getWidth() / (float)w->getHeight(), 0.01f, 100.0f));
+
+  r->setProjection(qsoft::Matrix::perspective(65.0f,
+    (float)w->getWidth() / (float)((w->getHeight() / 240.0f) * (float)VISIBLE_HEIGHT),
+    0.01f, 100.0f));
 
   std::shared_ptr<Camera> camera = getWindow()->getCurrentCamera();
   //camera.reset();
@@ -76,7 +82,13 @@ void ModelRenderer::onDisplay()
 
       r->setTexture(*mg->texture->data);
       r->setMesh(mg->mesh);
+      r->setViewport(0, 0, 320, VISIBLE_HEIGHT);
+      //r->setViewport(0, 0, 320, 240);
       r->render();
+      //r->setViewport(0, 0, 100, 100);
+      //r->render();
+      //r->setViewport(100, 100, 100, 100);
+      //r->render();
     }
   }
 
