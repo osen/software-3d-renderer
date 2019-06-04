@@ -15,6 +15,11 @@ void Texture::onLoad(std::string path)
 
   if(!raw)
   {
+    raw = stbi_load(std::string(path + ".jpg").c_str(), &w, &h, &channels, 4);
+  }
+
+  if(!raw)
+  {
     throw Exception("Failed to load '" + path + "'");
   }
 
