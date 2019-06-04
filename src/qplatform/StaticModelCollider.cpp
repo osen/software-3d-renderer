@@ -156,9 +156,14 @@ void StaticModelCollider::getColliding(qsoft::Vector3 position,
 
 qsoft::Vector3 StaticModelCollider::faceNormal(qsoft::Face& face)
 {
+  // Winding for CCW?
+  //qsoft::Vector3 N = qsoft::Vector3::cross(
+  //  qsoft::Vector3(face.b.position) - qsoft::Vector3(face.a.position),
+  //  qsoft::Vector3(face.c.position) - qsoft::Vector3(face.a.position));
+
   qsoft::Vector3 N = qsoft::Vector3::cross(
-    qsoft::Vector3(face.a.position) - qsoft::Vector3(face.b.position),
-    qsoft::Vector3(face.b.position) - qsoft::Vector3(face.c.position));
+    qsoft::Vector3(face.b.position) - qsoft::Vector3(face.c.position),
+    qsoft::Vector3(face.a.position) - qsoft::Vector3(face.c.position));
 
   return N;
 }
@@ -184,8 +189,8 @@ qsoft::Vector3 StaticModelCollider::getCollisionResponse(
     it != collisions.end(); it++)
   {
     qsoft::Vector3 n = faceNormal(*it);
-    n = n * -1;
     n = n.normalize();
+    //std::cout << n.x << " " << n.y << " " << n.z << std::endl;
     if(n.y < fabs(n.x) + fabs(n.z)) continue;
 
     if(!isColliding(*it, solve, size))
@@ -225,11 +230,8 @@ qsoft::Vector3 StaticModelCollider::getCollisionResponse(
       it != collisions.end(); it++)
     {
       qsoft::Vector3 n = faceNormal(*it);
-      n = n * -1;
       n = n.normalize();
-
       total = total + n;
-
       solve = solve + n * amount;
 
       if(!isColliding(solve, size))
@@ -339,7 +341,8 @@ void StaticModelCollider::onInit()
       // Overlap columns for sub column collision
       //cc->size.x += 1.0f;
       //cc->size.z += 1.0f;
-      // Conflicts with x / y index generation. Done elsewhere
+      // Conflicts with x / y index generation when matching column to collide with.
+      // Done when adding face instead.
 
       cc->position = pos;
       cols.push_back(cc);
