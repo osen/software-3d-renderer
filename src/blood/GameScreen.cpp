@@ -17,6 +17,7 @@ void GameScreen::onInit()
   std::shared_ptr<Entity> skyBox = getWorld()->addEntity<SkyBox>();
 
   //addSprite("sprites/weapons", Vector3(0, 2, 0));
+
   addZombie(Vector3(12, 3, -32));
   addZombie(Vector3(12, 3, -50));
   addZombie(Vector3(0, 3, -50));

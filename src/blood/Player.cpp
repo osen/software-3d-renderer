@@ -89,6 +89,7 @@ void Player::onTick()
 
   Vector3 lp = getTransform()->getPosition() + Vector3(0, -1, 0);
 
+  // Simulate gravity
   getTransform()->translate(Vector3(0, -4, 0) * getEnvironment()->getDeltaTime());
 
   if(getKeyboard()->isKeyDown(KEY_UP))

@@ -43,16 +43,62 @@ bool ColliderColumn::isColliding(qsoft::Vector3 position, qsoft::Vector3 size)
   return false;
 }
 
-bool StaticModelCollider::isColliding(qsoft::Vector3 position, qsoft::Vector3 size)
+void ColliderColumn::getColliding(qsoft::Vector3 position, qsoft::Vector3 size,
+    std::vector<qsoft::Face>& collisions)
 {
-  qsoft::Vector3 pos = position - extent.min;
-  size_t x = (size_t)(pos.x / cols.at(0)->size.x);
-  size_t y = (size_t)(pos.z / cols.at(0)->size.z);
-  size_t idx = y * resolution + x;
+  for(std::vector<qsoft::Face>::iterator i = faces.begin(); i != faces.end(); i++)
+  {
+    float f[3][3] = {0};
+    f[0][0] = i->a.position.x;
+    f[0][1] = i->a.position.y;
+    f[0][2] = i->a.position.z;
+    f[1][0] = i->b.position.x;
+    f[1][1] = i->b.position.y;
+    f[1][2] = i->b.position.z;
+    f[2][0] = i->c.position.x;
+    f[2][1] = i->c.position.y;
+    f[2][2] = i->c.position.z;
 
-  if(idx >= cols.size()) return false;
+    float bc[3] = {0};
+    bc[0] = position.x;
+    bc[1] = position.y;
+    bc[2] = position.z;
+    float bhs[3] = {0};
+    bhs[0] = size.x / 2.0f;
+    bhs[1] = size.y / 2.0f;
+    bhs[2] = size.z / 2.0f;
 
-  if(cols.at(idx)->isColliding(position, size))
+    if(triBoxOverlap(bc, bhs, f))
+    {
+      collisions.push_back(*i);
+    }
+  }
+}
+
+bool StaticModelCollider::isColliding(qsoft::Face& face,
+  qsoft::Vector3 position, qsoft::Vector3 size)
+{
+  float f[3][3] = {0};
+  f[0][0] = face.a.position.x;
+  f[0][1] = face.a.position.y;
+  f[0][2] = face.a.position.z;
+  f[1][0] = face.b.position.x;
+  f[1][1] = face.b.position.y;
+  f[1][2] = face.b.position.z;
+  f[2][0] = face.c.position.x;
+  f[2][1] = face.c.position.y;
+  f[2][2] = face.c.position.z;
+
+  float bc[3] = {0};
+  bc[0] = position.x;
+  bc[1] = position.y;
+  bc[2] = position.z;
+  float bhs[3] = {0};
+  bhs[0] = size.x / 2.0f;
+  bhs[1] = size.y / 2.0f;
+  bhs[2] = size.z / 2.0f;
+
+  if(triBoxOverlap(bc, bhs, f))
   {
     return true;
   }
@@ -60,174 +106,162 @@ bool StaticModelCollider::isColliding(qsoft::Vector3 position, qsoft::Vector3 si
   return false;
 }
 
-qsoft::Vector3 StaticModelCollider::getCollisionResponse(qsoft::Vector3 position, qsoft::Vector3 size, bool& solved, qsoft::Vector3 lastPosition)
+bool StaticModelCollider::isColliding(qsoft::Vector3 position,
+  qsoft::Vector3 size)
 {
-  qsoft::Vector3 diff = position - lastPosition;
-  float len = fabs(diff.x) + fabs(diff.y) + fabs(diff.z);
-
-/*
-  if(len >= size.x / 2.0f)
+  for(std::vector<qsoft::Face>::iterator i = collisions.begin();
+    i != collisions.end(); i++)
   {
-    solved = false;
-    return lastPosition;
-  }
-*/
+    float f[3][3] = {0};
+    f[0][0] = i->a.position.x;
+    f[0][1] = i->a.position.y;
+    f[0][2] = i->a.position.z;
+    f[1][0] = i->b.position.x;
+    f[1][1] = i->b.position.y;
+    f[1][2] = i->b.position.z;
+    f[2][0] = i->c.position.x;
+    f[2][1] = i->c.position.y;
+    f[2][2] = i->c.position.z;
 
+    float bc[3] = {0};
+    bc[0] = position.x;
+    bc[1] = position.y;
+    bc[2] = position.z;
+    float bhs[3] = {0};
+    bhs[0] = size.x / 2.0f;
+    bhs[1] = size.y / 2.0f;
+    bhs[2] = size.z / 2.0f;
+
+    if(triBoxOverlap(bc, bhs, f))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void StaticModelCollider::getColliding(qsoft::Vector3 position,
+  qsoft::Vector3 size)
+{
+  qsoft::Vector3 pos = position - extent.min;
+  size_t x = (size_t)(pos.x / cols.at(0)->size.x);
+  size_t y = (size_t)(pos.z / cols.at(0)->size.z);
+  size_t idx = y * resolution + x;
+
+  if(idx >= cols.size()) return;
+
+  cols.at(idx)->getColliding(position, size, collisions);
+}
+
+qsoft::Vector3 StaticModelCollider::faceNormal(qsoft::Face& face)
+{
+  qsoft::Vector3 N = qsoft::Vector3::cross(
+    qsoft::Vector3(face.a.position) - qsoft::Vector3(face.b.position),
+    qsoft::Vector3(face.b.position) - qsoft::Vector3(face.c.position));
+
+  return N;
+}
+
+qsoft::Vector3 StaticModelCollider::getCollisionResponse(
+  qsoft::Vector3 position, qsoft::Vector3 size, bool& solved,
+  qsoft::Vector3 lastPosition)
+{
   qsoft::Vector3 solve = position;
-  float amount = tryStep;
+  solved = false;
 
-  solved = true;
+  collisions.clear();
+  getColliding(solve, size);
 
-  if(!isColliding(solve, size)) return solve;
-
-/*
-  // Attempt to uncollide in y (undo gravity)
-  solve.y = lastPosition.y;
-  if(!isColliding(solve, size)) return solve;
-  solve.y = position.y;
-*/
-
-  solved = true;
-
-  // Attempt to uncollide in y (steps)
-  while(true)
+  if(!isColliding(solve, size))
   {
-    solve.y += amount;
-    if(!isColliding(solve, size)) break;
-    solve.y -= amount;
-    amount += tryStep;
+    solved = true;
+    return solve;
+  }
 
-    if(amount > maxStep)
+  // Favour Y faces first.
+  for(std::vector<qsoft::Face>::iterator it = collisions.begin();
+    it != collisions.end(); it++)
+  {
+    qsoft::Vector3 n = faceNormal(*it);
+    n = n * -1;
+    n = n.normalize();
+    if(n.y < fabs(n.x) + fabs(n.z)) continue;
+
+    if(!isColliding(*it, solve, size))
     {
-      solved = false;
-      break;
+      continue;
+    }
+
+    float amount = tryStep;
+
+    while(true)
+    {
+      solve = solve + n * amount;
+
+      if(!isColliding(*it, solve, size))
+      {
+        break;
+      }
+
+      solve = solve - n * amount;
+      amount += tryStep;
+
+      if(amount > maxStep)
+      {
+        break;
+      }
     }
   }
 
-  if(solved) return solve;
-  solved = true;
-  amount = tryInc;
+  float amount = tryInc;
 
-  // Attempt to uncollide in x/z (walls)
   while(true)
   {
-    //if(!isColliding(solve, size)) break;
-    solve.x += amount;
-    if(!isColliding(solve, size)) break;
-    solve.x -= amount;
-    solve.x -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.x += amount;
-    solve.z += amount;
-    if(!isColliding(solve, size)) break;
-    solve.z -= amount;
-    solve.z -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.z += amount;
+    qsoft::Vector3 total;
+
+    // Try to uncollide using face normals
+    for(std::vector<qsoft::Face>::iterator it = collisions.begin();
+      it != collisions.end(); it++)
+    {
+      qsoft::Vector3 n = faceNormal(*it);
+      n = n * -1;
+      n = n.normalize();
+
+      total = total + n;
+
+      solve = solve + n * amount;
+
+      if(!isColliding(solve, size))
+      {
+        solved = true;
+        return solve;
+      }
+
+      solve = solve - n * amount;
+    }
+
+    // Try to uncollide using averaged face normals
+    total = total.normalize();
+    solve = solve + total * amount;
+
+    if(!isColliding(solve, size))
+    {
+      solved = true;
+      return solve;
+    }
+
+    solve = solve - total * amount;
     amount += tryInc;
 
     if(amount > maxInc)
     {
-      solved = false;
       break;
     }
   }
 
-  if(solved) return solve;
-  solved = true;
-  amount = tryInc;
-
-  // Attempt to uncollide in x/z/y (walls + steps)
-  while(true)
-  {
-    solve.y = lastPosition.y;
-    solve.x += amount;
-    if(!isColliding(solve, size)) break;
-    solve.x -= amount;
-    solve.x -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.x += amount;
-    solve.z += amount;
-    if(!isColliding(solve, size)) break;
-    solve.z -= amount;
-    solve.z -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.z += amount;
-    solve.y = position.y;
-    amount += tryInc;
-
-    if(amount > maxInc)
-    {
-      solved = false;
-      break;
-    }
-  }
-
-  if(solved) return solve;
-  solved = true;
-  amount = tryInc;
-
-  // Attempt to uncollide in x+z (corners)
-  while(true)
-  {
-    //if(!isColliding(solve, size)) break;
-    solve.x -= amount; // TL
-    solve.z += amount;
-    if(!isColliding(solve, size)) break;
-    solve.x += amount; // TR
-    solve.x += amount;
-    if(!isColliding(solve, size)) break;
-    solve.z -= amount; // BR
-    solve.z -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.x -= amount; // BL
-    solve.x -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.z += amount;
-    solve.x += amount;
-    amount += tryInc;
-
-    if(amount > maxInc)
-    {
-      solved = false;
-      break;
-    }
-  }
-
-  if(solved) return solve;
-  solved = true;
-  amount = tryInc;
-
-  // Attempt to uncollide in x+z/y (corners + steps)
-  while(true)
-  {
-    //if(!isColliding(solve, size)) break;
-    solve.y = lastPosition.y;
-    solve.x -= amount; // TL
-    solve.z += amount;
-    if(!isColliding(solve, size)) break;
-    solve.x += amount; // TR
-    solve.x += amount;
-    if(!isColliding(solve, size)) break;
-    solve.z -= amount; // BR
-    solve.z -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.x -= amount; // BL
-    solve.x -= amount;
-    if(!isColliding(solve, size)) break;
-    solve.z += amount;
-    solve.x += amount;
-    solve.y = position.y;
-    amount += tryInc;
-
-    if(amount > maxInc)
-    {
-      solved = false;
-      break;
-    }
-  }
-
-  return solve;
+  solved = false;
+  return position;
 }
 
 void StaticModelCollider::generateExtent()
