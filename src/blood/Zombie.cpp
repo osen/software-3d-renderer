@@ -88,7 +88,7 @@ void Zombie::onTick()
   Vector3 np = getTransform()->getPosition();
 
   bool solved = false;
-  Vector3 sp = smc->getCollisionResponse(np, Vector3(2, 3, 2), solved, lp);
+  Vector3 sp = smc->getCollisionResponse(np, Vector3(2, 3, 2), solved);
 
   if(solved)
   {

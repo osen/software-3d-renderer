@@ -20,6 +20,4 @@ class Player : public Component
 public:
   void onInit();
 
-  std::shared_ptr<StaticModelCollider> smc;
-
 };

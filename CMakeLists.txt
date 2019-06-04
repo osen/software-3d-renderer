@@ -85,6 +85,7 @@ add_library(qplatform
   src/qplatform/Gui.cpp
   src/qplatform/Audio.cpp
   src/qplatform/Sound.cpp
+  src/qplatform/BoxCollider.cpp
 )
 
 if(MSVC)

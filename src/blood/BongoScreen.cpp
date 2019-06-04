@@ -14,7 +14,6 @@ void BongoScreen::onInit()
   std::shared_ptr<Entity> player = getWorld()->addEntity<Player>();
   player->getComponent<Transform>()->setPosition(Vector3(-4, 3, 0));
   player->getComponent<Transform>()->setRotation(Vector3(0, -90, 0));
-  player->getComponent<Player>()->smc = smc;
 
   getWorld()->addEntity<BongoCat>();
 

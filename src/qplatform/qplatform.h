@@ -11,6 +11,7 @@
 #include "ModelRenderer.h"
 #include "Texture.h"
 #include "StaticModelCollider.h"
+#include "BoxCollider.h"
 #include "Transform.h"
 #include "Environment.h"
 #include "Camera.h"

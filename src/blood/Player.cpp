@@ -16,6 +16,10 @@ void Player::onInit()
 
   getEntity()->addComponent<Camera>();
   //getEntity()->addComponent<Fade>();
+
+  std::shared_ptr<BoxCollider> bc = getEntity()->addComponent<BoxCollider>();
+  bc->setSize(Vector3(1, 2, 1));
+  bc->setOffset(Vector3(0, -1, 0));
 }
 
 void Player::doAttack()
@@ -65,6 +69,9 @@ void Player::checkHits()
 
 void Player::onTick()
 {
+  // Simulate gravity
+  getTransform()->translate(Vector3(0, -4, 0) * getEnvironment()->getDeltaTime());
+
   if(getKeyboard()->isKeyPressed(KEY_T))
   {
     getWorld()->reset();
@@ -87,11 +94,6 @@ void Player::onTick()
       getTransform()->getRotation() + Vector3(0, -90, 0) * getEnvironment()->getDeltaTime());
   }
 
-  Vector3 lp = getTransform()->getPosition() + Vector3(0, -1, 0);
-
-  // Simulate gravity
-  getTransform()->translate(Vector3(0, -4, 0) * getEnvironment()->getDeltaTime());
-
   if(getKeyboard()->isKeyDown(KEY_UP))
   {
     getTransform()->translate(Vector3(0, 0, speed) * getEnvironment()->getDeltaTime());
@@ -100,23 +102,6 @@ void Player::onTick()
   {
     getTransform()->translate(Vector3(0, 0, -speed) * getEnvironment()->getDeltaTime());
   }
-
-  Vector3 np = getTransform()->getPosition() + Vector3(0, -1, 0);
-
-  bool solved = false;
-  Vector3 sp = smc->getCollisionResponse(np, Vector3(1, 2, 1), solved, lp);
-
-  if(solved)
-  {
-    np = sp;
-  }
-  else
-  {
-    np = lp;
-  }
-
-  np = np + Vector3(0, 1, 0);
-  getTransform()->setPosition(np);
 
   if(getKeyboard()->isKeyDown(KEY_SPACE))
   {

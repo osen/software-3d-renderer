@@ -169,8 +169,7 @@ qsoft::Vector3 StaticModelCollider::faceNormal(qsoft::Face& face)
 }
 
 qsoft::Vector3 StaticModelCollider::getCollisionResponse(
-  qsoft::Vector3 position, qsoft::Vector3 size, bool& solved,
-  qsoft::Vector3 lastPosition)
+  qsoft::Vector3 position, qsoft::Vector3 size, bool& solved)
 {
   qsoft::Vector3 solve = position;
   solved = false;
@@ -217,6 +216,12 @@ qsoft::Vector3 StaticModelCollider::getCollisionResponse(
         break;
       }
     }
+  }
+
+  if(!isColliding(solve, size))
+  {
+    solved = true;
+    return solve;
   }
 
   float amount = tryInc;

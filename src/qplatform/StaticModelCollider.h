@@ -50,7 +50,7 @@ public:
   bool isColliding(qsoft::Vector3 position, qsoft::Vector3 size);
   void getColliding(qsoft::Vector3 position, qsoft::Vector3 size);
 
-  qsoft::Vector3 getCollisionResponse(qsoft::Vector3 position, qsoft::Vector3 size,
-    bool& solved, qsoft::Vector3 lastPosition);
+  qsoft::Vector3 getCollisionResponse(qsoft::Vector3 position,
+    qsoft::Vector3 size, bool& solved);
 
 };
