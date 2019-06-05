@@ -1,13 +1,12 @@
 #ifndef QPLATFORM_PLATFORM_H
 #define QPLATFORM_PLATFORM_H
 
-#include <SDL2/SDL.h>
-
 #include <sr1/noncopyable>
 #include <sr1/zero_initialized>
 #include <sr1/memory>
 
 #include <memory>
+#include <vector>
 
 class World;
 class Environment;
@@ -27,11 +26,14 @@ class Platform : public std::sr1::noncopyable
   std::sr1::shared_ptr<Audio> audio;
   std::weak_ptr<Platform> self;
   std::shared_ptr<Window> window;
-  std::sr1::zero_initialized<SDL_Window *> _window;
   std::sr1::zero_initialized<bool> quit;
 
 public:
   static std::shared_ptr<Platform> initialize();
+  void tick();
+  void keyDown(char key);
+  void keyUp(char key);
+  void display(int width, int height, unsigned char *buffer);
 
   void run();
 

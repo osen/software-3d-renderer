@@ -72,38 +72,38 @@ void Player::onTick()
   // Simulate gravity
   getTransform()->translate(Vector3(0, -4, 0) * getEnvironment()->getDeltaTime());
 
-  if(getKeyboard()->isKeyPressed(KEY_T))
+  if(getKeyboard()->isKeyPressed('t'))
   {
     getWorld()->reset();
     getWorld()->addEntity<GameScreen>();
   }
-  else if(getKeyboard()->isKeyPressed(KEY_Y))
+  else if(getKeyboard()->isKeyPressed('y'))
   {
     getWorld()->reset();
     getWorld()->addEntity<BongoScreen>();
   }
 
-  if(getKeyboard()->isKeyDown(KEY_LEFT))
+  if(getKeyboard()->isKeyDown('a'))
   {
     getTransform()->setRotation(
       getTransform()->getRotation() + Vector3(0, 90, 0) * getEnvironment()->getDeltaTime());
   }
-  else if(getKeyboard()->isKeyDown(KEY_RIGHT))
+  else if(getKeyboard()->isKeyDown('d'))
   {
     getTransform()->setRotation(
       getTransform()->getRotation() + Vector3(0, -90, 0) * getEnvironment()->getDeltaTime());
   }
 
-  if(getKeyboard()->isKeyDown(KEY_UP))
+  if(getKeyboard()->isKeyDown('w'))
   {
     getTransform()->translate(Vector3(0, 0, speed) * getEnvironment()->getDeltaTime());
   }
-  else if(getKeyboard()->isKeyDown(KEY_DOWN))
+  else if(getKeyboard()->isKeyDown('s'))
   {
     getTransform()->translate(Vector3(0, 0, -speed) * getEnvironment()->getDeltaTime());
   }
 
-  if(getKeyboard()->isKeyDown(KEY_SPACE))
+  if(getKeyboard()->isKeyDown(' '))
   {
     if(attack == 0)
     {

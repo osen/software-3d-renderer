@@ -2,15 +2,9 @@
 
 #include <qplatform/qplatform.h>
 
-int main()
+void platform_main(std::shared_ptr<Platform> platform)
 {
-  std::shared_ptr<Platform> p = Platform::initialize();
-
-  std::shared_ptr<Entity> e = p->getWorld()->addEntity();
+  std::shared_ptr<Entity> e = platform->getWorld()->addEntity();
   std::shared_ptr<GameScreen> ms = e->addComponent<GameScreen>();
-
-  p->run();
-
-  return 0;
 }
 

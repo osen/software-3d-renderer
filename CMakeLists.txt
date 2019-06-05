@@ -63,6 +63,7 @@ target_link_libraries(example qsoft SDL2main SDL2)
 
 add_library(qplatform
   contrib/stb_image/stb_image.cpp
+  src/qplatform/entry.cpp
   src/qplatform/tribox.cpp
   src/qplatform/Platform.cpp
   src/qplatform/World.cpp
@@ -89,12 +90,12 @@ add_library(qplatform
 )
 
 if(MSVC)
-  target_link_libraries(qplatform qsoft SDL2 openal32)
+  target_link_libraries(qplatform qsoft openal32)
 else()
-  target_link_libraries(qplatform qsoft SDL2 openal)
+  target_link_libraries(qplatform qsoft openal)
 endif()
 
-add_executable(blood
+add_library(blood
   src/blood/main.cpp
   src/blood/GameScreen.cpp
   src/blood/BongoScreen.cpp
@@ -106,4 +107,9 @@ add_executable(blood
   src/blood/BongoCat.cpp
 )
 
-target_link_libraries(blood qplatform)
+add_executable(sdl2_platform
+  src/sdl2_platform/main.cpp
+)
+
+target_link_libraries(sdl2_platform SDL2 qplatform blood qplatform blood)
+
