@@ -113,3 +113,9 @@ add_executable(sdl2_platform
 
 target_link_libraries(sdl2_platform SDL2 qplatform blood qplatform blood)
 
+add_executable(x11_platform
+  src/x11_platform/main.cpp
+)
+
+target_link_libraries(x11_platform X11 qplatform blood qplatform blood)
+
