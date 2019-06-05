@@ -25,7 +25,7 @@ public:
 
     for(size_t i = 0; i < resources.size(); i++)
     {
-      if(resources.at(i)->getPath() == platform.lock()->getEnvironment()->getDataPath() + "/" + path)
+      if(resources.at(i)->getPath() == path)
       {
         std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(resources.at(i));
 

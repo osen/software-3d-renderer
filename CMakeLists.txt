@@ -5,8 +5,8 @@ if(MSVC)
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")
 else()
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fopenmp")
-  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O3")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif()
 
 add_definitions(-DSTD_SR1_DEBUG)
@@ -53,13 +53,13 @@ add_library(qsoft
   src/qsoft/Vector.cpp
   src/qsoft/Debug.cpp
   src/qsoft/Util.cpp
+  src/qsoft/Shadow.cpp
 )
 
-add_executable(example
-  src/example/main.cpp
-)
-
-target_link_libraries(example qsoft SDL2main SDL2)
+#add_executable(example
+#  src/example/main.cpp
+#)
+#target_link_libraries(example qsoft SDL2main SDL2)
 
 add_library(qplatform
   contrib/stb_image/stb_image.cpp
@@ -107,11 +107,10 @@ add_library(blood
   src/blood/BongoCat.cpp
 )
 
-add_executable(sdl2_platform
-  src/sdl2_platform/main.cpp
-)
-
-target_link_libraries(sdl2_platform SDL2 qplatform blood qplatform blood)
+#add_executable(sdl2_platform
+#  src/sdl2_platform/main.cpp
+#)
+#target_link_libraries(sdl2_platform SDL2 qplatform blood qplatform blood)
 
 add_executable(x11_platform
   src/x11_platform/main.cpp

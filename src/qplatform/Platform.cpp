@@ -86,10 +86,12 @@ void drawBlock(unsigned char *src, int width, int height,
   }
 }
 
-void Platform::display(int width, int height, unsigned char *buffer)
+void Platform::display(int width, int height, int type, unsigned char *buffer)
 {
   window->width = width;
   window->height = height;
+
+  getWindow()->getShadow()->setRaw(buffer, width, height, type);
 
   std::shared_ptr<qsoft::Texture> b = window->buffer;
   b->clear();

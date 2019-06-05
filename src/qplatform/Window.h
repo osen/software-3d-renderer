@@ -17,6 +17,7 @@ public:
   std::shared_ptr<qsoft::Renderer> getRenderer();
   std::shared_ptr<Camera> getCurrentCamera();
   std::shared_ptr<qsoft::Texture> getBuffer();
+  std::sr1::shared_ptr<qsoft::Shadow> getShadow();
 
 private:
   static std::shared_ptr<Window> initialize();
@@ -28,5 +29,6 @@ private:
 
   std::shared_ptr<qsoft::Texture> buffer;
   std::shared_ptr<qsoft::Renderer> renderer;
+  std::sr1::shared_ptr<qsoft::Shadow> shadow;
 
 };

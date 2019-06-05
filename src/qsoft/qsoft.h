@@ -10,5 +10,6 @@
 #include "Color.h"
 #include "Matrix.h"
 #include "Color.h"
+#include "Shadow.h"
 
 #endif

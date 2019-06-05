@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <cstdlib>
+
 #define WIDTH 800
 #define HEIGHT 600
 
@@ -12,7 +14,7 @@ extern "C"
   void PlatformTick();
   void PlatformKeyDown(char key);
   void PlatformKeyUp(char key);
-  void PlatformDisplay(int width, int height, unsigned char *buffer);
+  void PlatformDisplay(int width, int height, int type, unsigned char *buffer);
 }
 
 std::vector<unsigned char> buffer;
@@ -95,7 +97,7 @@ int main()
       buffer.resize(width * height * 3);
     }
 
-    PlatformDisplay(width, height, &buffer.at(0));
+    PlatformDisplay(width, height, 3, &buffer.at(0));
     unsigned char *p = &buffer.at(0);
     char *d = data;
 

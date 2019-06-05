@@ -14,7 +14,15 @@ std::shared_ptr<Window> Window::initialize()
   rtn->renderer = std::make_shared<qsoft::Renderer>();
   rtn->renderer->setTarget(*rtn->buffer);
 
+  rtn->shadow = qsoft::Shadow::create();
+  rtn->renderer->setShadow(rtn->shadow);
+
   return rtn;
+}
+
+std::sr1::shared_ptr<qsoft::Shadow> Window::getShadow()
+{
+  return shadow;
 }
 
 std::shared_ptr<qsoft::Renderer> Window::getRenderer()

@@ -33,7 +33,7 @@ public:
   void tick();
   void keyDown(char key);
   void keyUp(char key);
-  void display(int width, int height, unsigned char *buffer);
+  void display(int width, int height, int type, unsigned char *buffer);
 
   void run();
 

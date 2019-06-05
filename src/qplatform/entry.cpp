@@ -27,9 +27,9 @@ void PlatformKeyUp(char key)
   p->keyUp(key);
 }
 
-void PlatformDisplay(int width, int height, unsigned char *buffer)
+void PlatformDisplay(int width, int height, int type, unsigned char *buffer)
 {
-  p->display(width, height, buffer);
+  p->display(width, height, type, buffer);
 }
 
 }

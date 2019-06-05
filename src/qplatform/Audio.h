@@ -8,6 +8,8 @@
 #include <sr1/vector>
 #include <sr1/memory>
 
+#include <memory>
+
 class Platform;
 class Sound;
 
