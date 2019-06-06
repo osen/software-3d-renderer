@@ -63,7 +63,7 @@ int main()
       buffer.resize(width * height * 3);
     }
 
-    PlatformDisplay(width, height, 3, &buffer.at(0));
+    PlatformDisplay(width, height, 13, &buffer.at(0));
     unsigned char *p = &buffer.at(0);
     SDL_Rect r = {0};
     r.w = 1;

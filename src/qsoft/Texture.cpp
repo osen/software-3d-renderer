@@ -81,15 +81,14 @@ void Texture::setPixel(int x, int y, const Color& color)
   {
     rw = (float)impl->rawWidth / (float)impl->width;
     rh = (float)impl->rawHeight / (float)impl->height;
+    x = x * rw;
+    y = y * rh;
+    rw ++;
+    rh ++;
   }
 
   int bpp = impl->rawBpp;
   bool bgr = impl->rawBgr;
-
-  x = x * rw;
-  y = y * rh;
-  rw ++;
-  rh ++;
 
   for(int yi = 0; yi < rh; yi++)
   {
@@ -155,7 +154,7 @@ void Texture::setRaw(unsigned char *raw, int width, int height, int format)
   impl->rawHeight = height;
 
   impl->rawBpp = 3;
-  impl->rawStretch = true;
+  impl->rawStretch = false;
   impl->rawBgr = false;
 
   if(format == 4)
