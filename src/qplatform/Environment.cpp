@@ -27,8 +27,9 @@ std::shared_ptr<Environment> Environment::initialize()
 #ifdef _WIN32
   FILETIME ft = {0};
   GetSystemTimeAsFileTime(&ft);
-  rtn->lastTime = (LONGLONG)ft.dwLowDateTime +
-    ((LONGLONG)(ft.dwHighDateTime) << 32LL);
+  SYSTEMTIME st = {0};
+  FileTimeToSystemTime(&ft, &st);
+  rtn->lastTime = st.wSecond * 1000 + st.wMilliseconds;
 #else
   timeval tp = {0};
   gettimeofday(&tp, NULL);
@@ -45,8 +46,9 @@ void Environment::tick()
 #ifdef _WIN32
   FILETIME ft = {0};
   GetSystemTimeAsFileTime(&ft);
-  double now = (LONGLONG)ft.dwLowDateTime +
-    ((LONGLONG)(ft.dwHighDateTime) << 32LL);
+  SYSTEMTIME st = {0};
+  FileTimeToSystemTime(&ft, &st);
+  double now = st.wSecond * 1000 + st.wMilliseconds;
 #else
   timeval tp = {0};
   gettimeofday(&tp, NULL);
@@ -56,5 +58,6 @@ void Environment::tick()
   lastTime = now;
   deltaTime = diffTime / 1000.0f;
 
+  if(deltaTime <= 0) deltaTime = 0.001f;
   if(deltaTime > 0.5f) deltaTime = 0.5f;
 }
