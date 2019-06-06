@@ -1,6 +1,8 @@
 #include "Texture.h"
 #include "Color.h"
 
+#include <sr1/zero_initialized>
+
 #include <vector>
 
 #include <cstring>
@@ -14,6 +16,13 @@ struct TextureImpl
   int width;
   int height;
   std::vector<float> depthBuffer;
+
+  std::sr1::zero_initialized<unsigned char *> raw;
+  std::sr1::zero_initialized<int> rawWidth;
+  std::sr1::zero_initialized<int> rawHeight;
+  std::sr1::zero_initialized<int> rawBpp;
+  std::sr1::zero_initialized<bool> rawStretch;
+  std::sr1::zero_initialized<bool> rawBgr;
 };
 
 Texture::Texture() { }
@@ -57,6 +66,66 @@ void Texture::setPixel(int x, int y, const Color& color)
 
   //*(impl->data.begin() + y * impl->width + x) = color;
   impl->data.at(y * impl->width + x) = color;
+
+  if(!impl->raw)
+  {
+    return;
+  }
+
+  unsigned char *raw = impl->raw;
+
+  double rw = 1;
+  double rh = 1;
+
+  if(impl->rawStretch)
+  {
+    rw = (float)impl->rawWidth / (float)impl->width;
+    rh = (float)impl->rawHeight / (float)impl->height;
+  }
+
+  int bpp = impl->rawBpp;
+  bool bgr = impl->rawBgr;
+
+  x = x * rw;
+  y = y * rh;
+  rw ++;
+  rh ++;
+
+  for(int yi = 0; yi < rh; yi++)
+  {
+    if(y + yi >= impl->rawHeight) break;
+
+    unsigned char *yp = raw + impl->rawWidth * bpp * (y + yi);
+    unsigned char *xp = yp + x * bpp;
+
+    for(int xi = 0; xi < rw; xi++)
+    {
+      if(x + xi >= impl->rawWidth) break;
+
+      if(bgr)
+      {
+        *(xp) = color.b;
+        *(xp + 1) = color.g;
+        *(xp + 2) = color.r;
+      }
+      else
+      {
+        *(xp) = color.r;
+        *(xp + 1) = color.g;
+        *(xp + 2) = color.b;
+      }
+
+      if(bpp == 4)
+      {
+        *(xp + 3) = 255;
+        xp += 4;
+      }
+      else
+      {
+        xp += 3;
+      }
+    }
+  }
 }
 
 int Texture::getWidth() const
@@ -77,6 +146,42 @@ float Texture::getDepth(int x, int y)
 void Texture::setDepth(int x, int y, float depth)
 {
   impl->depthBuffer.at(y * impl->width + x) = depth;
+}
+
+void Texture::setRaw(unsigned char *raw, int width, int height, int format)
+{
+  impl->raw = raw;
+  impl->rawWidth = width;
+  impl->rawHeight = height;
+
+  impl->rawBpp = 3;
+  impl->rawStretch = true;
+  impl->rawBgr = false;
+
+  if(format == 4)
+  {
+    impl->rawBpp = 4;
+  }
+  else if(format == 5)
+  {
+    impl->rawBpp = 4;
+    impl->rawBgr = true;
+  }
+  else if(format == 13)
+  {
+    impl->rawStretch = true;
+  }
+  else if(format == 14)
+  {
+    impl->rawBpp = 4;
+    impl->rawStretch = true;
+  }
+  else if(format == 15)
+  {
+    impl->rawBpp = 4;
+    impl->rawBgr = true;
+    impl->rawStretch = true;
+  }
 }
 
 }

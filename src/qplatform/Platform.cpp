@@ -91,14 +91,16 @@ void Platform::display(int width, int height, int type, unsigned char *buffer)
   window->width = width;
   window->height = height;
 
-  getWindow()->getShadow()->setRaw(buffer, width, height, type);
+  //getWindow()->getShadow()->setRaw(buffer, width, height, type);
 
   std::shared_ptr<qsoft::Texture> b = window->buffer;
   b->clear();
+  b->setRaw(buffer, width, height, type);
 
   world->display();
   world->gui();
 
+/*
   double zx = window->width / 320.0f;
   double zy = window->height / 240.0f;
   qsoft::Color c;
@@ -116,6 +118,7 @@ void Platform::display(int width, int height, int type, unsigned char *buffer)
       drawBlock(buffer, window->width, window->height, r, c);
     }
   }
+*/
 }
 
 std::shared_ptr<Window> Platform::getWindow()

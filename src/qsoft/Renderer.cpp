@@ -42,7 +42,6 @@ struct RendererImpl
   Texture target;
   Matrix viewport;
   Vector2 viewportSize;
-  std::sr1::shared_ptr<Shadow> shadow;
 
   ThreadPool<RendererUnit> pool;
 
@@ -57,11 +56,6 @@ struct RendererImpl
 };
 
 Renderer::Renderer() : impl(std::sr1::make_shared<RendererImpl>()) { }
-
-void Renderer::setShadow(std::sr1::shared_ptr<Shadow> shadow)
-{
-  impl->shadow = shadow;
-}
 
 void Renderer::setViewport(int x, int y, int width, int height)
 {
@@ -310,11 +304,6 @@ void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
       //int tx = (int)(u * (float)texture.getWidth());
       //int ty = (int)(v * (float)texture.getHeight());
       target.setPixel(px, py, frag);
-
-      //if(shadow)
-      //{
-        shadow->setPixel(px, py, frag);
-      //}
 
       // TODO: If !texture?
       // target.setPixel(px, py, Color(0, 255, 0));

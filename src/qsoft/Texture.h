@@ -22,6 +22,8 @@ public:
   float getDepth(int x, int y);
   void setDepth(int x, int y, float depth);
 
+  void setRaw(unsigned char *raw, int width, int height, int format);
+
 };
 
 }

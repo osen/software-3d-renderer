@@ -1,8 +1,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#include <vector>
-
 #include <cstdlib>
 
 #define WIDTH 800
@@ -16,8 +14,6 @@ extern "C"
   void PlatformKeyUp(char key);
   void PlatformDisplay(int width, int height, int type, unsigned char *buffer);
 }
-
-std::vector<unsigned char> buffer;
 
 int main()
 {
@@ -69,6 +65,7 @@ int main()
         XDestroyImage(img);
         // free(data); // Not needed, XDestroyImage deletes data store
         data = (char *)malloc(width * height * 4);
+
         img = XCreateImage(display, DefaultVisual(display, screen),
           24, ZPixmap,
           0, data, width, height, 32, 0);
@@ -91,27 +88,7 @@ int main()
     }
 
     PlatformTick();
-
-    if(buffer.size() < width * height * 3)
-    {
-      buffer.resize(width * height * 3);
-    }
-
-    PlatformDisplay(width, height, 3, &buffer.at(0));
-    unsigned char *p = &buffer.at(0);
-    char *d = data;
-
-    for(int i = 0; i < width * height; i++)
-    {
-      *(d + 0) = *(p + 2);
-      *(d + 1) = *(p + 1);
-      *(d + 2) = *(p + 0);
-      *(d + 3) = (char)255;
-
-      p += 3;
-      d += 4;
-    }
-
+    PlatformDisplay(width, height, 15, (unsigned char *)data);
     XPutImage(display, window, gc, img, 0, 0, 0, 0, width, height);
   }
 
