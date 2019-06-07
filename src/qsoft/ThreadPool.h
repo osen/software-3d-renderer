@@ -1,4 +1,6 @@
-//#define THREADPOOL_DISABLE
+#ifdef _WIN32
+  #define THREADPOOL_DISABLE
+#endif
 
 #ifdef STD_SR1_DEBUG
   #define THREADPOOL_DISABLE

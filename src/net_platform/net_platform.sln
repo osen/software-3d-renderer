@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net_platform", "net_platfor
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "native", "native\native.vcxproj", "{25F42288-124B-4FA0-9557-372B591E4DEF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qsoft", "qsoft\qsoft.vcxproj", "{E2329691-F602-4355-BF70-74489A0E59C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -35,6 +37,16 @@ Global
 		{25F42288-124B-4FA0-9557-372B591E4DEF}.Release|Win32.ActiveCfg = Release|Win32
 		{25F42288-124B-4FA0-9557-372B591E4DEF}.Release|Win32.Build.0 = Release|Win32
 		{25F42288-124B-4FA0-9557-372B591E4DEF}.Release|x86.ActiveCfg = Release|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Debug|Win32.Build.0 = Debug|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Debug|x86.ActiveCfg = Debug|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Release|Win32.ActiveCfg = Release|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Release|Win32.Build.0 = Release|Win32
+		{E2329691-F602-4355-BF70-74489A0E59C3}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
