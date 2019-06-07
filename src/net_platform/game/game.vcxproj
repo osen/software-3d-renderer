@@ -11,17 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{25F42288-124B-4FA0-9557-372B591E4DEF}</ProjectGuid>
-    <RootNamespace>native</RootNamespace>
+    <ProjectGuid>{44F5A9F9-6E6B-4B03-ACC9-C1AFA1B215C8}</ProjectGuid>
+    <RootNamespace>game</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -37,17 +37,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -59,6 +64,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -67,18 +73,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="native.cpp" />
+    <ClCompile Include="..\..\blood\BongoCat.cpp" />
+    <ClCompile Include="..\..\blood\BongoScreen.cpp" />
+    <ClCompile Include="..\..\blood\Fade.cpp" />
+    <ClCompile Include="..\..\blood\GameScreen.cpp" />
+    <ClCompile Include="..\..\blood\HitBox.cpp" />
+    <ClCompile Include="..\..\blood\main.cpp" />
+    <ClCompile Include="..\..\blood\Player.cpp" />
+    <ClCompile Include="..\..\blood\SkyBox.cpp" />
+    <ClCompile Include="..\..\blood\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\game\game.vcxproj">
-      <Project>{44f5a9f9-6e6b-4b03-acc9-c1afa1b215c8}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\qplatform\qplatform.vcxproj">
-      <Project>{6d4a9ad8-76ae-4a72-86a7-308b3bc74cd4}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\qsoft\qsoft.vcxproj">
-      <Project>{e2329691-f602-4355-bf70-74489a0e59c3}</Project>
-    </ProjectReference>
+    <ClInclude Include="..\..\blood\BongoCat.h" />
+    <ClInclude Include="..\..\blood\BongoScreen.h" />
+    <ClInclude Include="..\..\blood\Fade.h" />
+    <ClInclude Include="..\..\blood\GameScreen.h" />
+    <ClInclude Include="..\..\blood\HitBox.h" />
+    <ClInclude Include="..\..\blood\Player.h" />
+    <ClInclude Include="..\..\blood\SkyBox.h" />
+    <ClInclude Include="..\..\blood\Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
