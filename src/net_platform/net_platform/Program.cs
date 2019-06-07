@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Windows.Forms;
 
-namespace net_platform
+class Program
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-        }
-    }
+  static void Main(string[] args)
+  {
+    Form form = new Form();
+    Application.Run(form);
+  }
 }
