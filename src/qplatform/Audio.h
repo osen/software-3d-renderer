@@ -1,7 +1,9 @@
 #include "Exception.h"
 
-#include <AL/al.h>
-#include <AL/alc.h>
+#ifndef _WIN32
+  #include <AL/al.h>
+  #include <AL/alc.h>
+#endif
 
 #include <sr1/noncopyable>
 #include <sr1/zero_initialized>
@@ -22,9 +24,11 @@ class Audio : public std::sr1::noncopyable
 
   void tick();
 
+#ifndef _WIN32
   std::sr1::zero_initialized<ALCdevice *> device;
   std::sr1::zero_initialized<ALCcontext *> context;
   std::sr1::vector<ALuint> audioSources;
+#endif
 
   std::weak_ptr<Platform> platform;
 

@@ -62,7 +62,6 @@ add_executable(example
 target_link_libraries(example qsoft SDL2main SDL2)
 
 add_library(qplatform
-  contrib/stb_image/stb_image.cpp
   src/qplatform/entry.cpp
   src/qplatform/tribox.cpp
   src/qplatform/Platform.cpp

@@ -69,6 +69,14 @@
   <ItemGroup>
     <ClCompile Include="native.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\qplatform\qplatform.vcxproj">
+      <Project>{6d4a9ad8-76ae-4a72-86a7-308b3bc74cd4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\qsoft\qsoft.vcxproj">
+      <Project>{e2329691-f602-4355-bf70-74489a0e59c3}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

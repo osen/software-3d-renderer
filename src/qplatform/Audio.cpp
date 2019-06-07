@@ -7,6 +7,7 @@ std::sr1::shared_ptr<Audio> Audio::initialize(
   std::sr1::shared_ptr<Audio> rtn = std::sr1::make_shared<Audio>();
   rtn->platform = platform;
 
+#ifndef _WIN32
   rtn->device = alcOpenDevice(NULL);
 
   if(rtn->device == NULL)
@@ -28,12 +29,14 @@ std::sr1::shared_ptr<Audio> Audio::initialize(
     alcCloseDevice(rtn->device);
     throw Exception("Failed to make context current");
   }
+#endif
 
   return rtn;
 }
 
 Audio::~Audio()
 {
+#ifndef _WIN32
   for(std::sr1::vector<ALuint>::iterator it = audioSources.begin();
     it != audioSources.end(); it++)
   {
@@ -44,10 +47,12 @@ Audio::~Audio()
   alcMakeContextCurrent(NULL);
   alcDestroyContext(context);
   alcCloseDevice(device);
+#endif
 }
 
 void Audio::tick()
 {
+#ifndef _WIN32
   for(std::sr1::vector<ALuint>::iterator it = audioSources.begin();
     it != audioSources.end();)
   {
@@ -65,10 +70,12 @@ void Audio::tick()
       it++;
     }
   }
+#endif
 }
 
 void Audio::playSound(std::shared_ptr<Sound> sound)
 {
+#ifndef _WIN32
   ALuint sid = 0;
   alGenSources(1, &sid);
   //alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
@@ -77,4 +84,5 @@ void Audio::playSound(std::shared_ptr<Sound> sound)
   alSourcePlay(sid);
 
   audioSources.push_back(sid);
+#endif
 }

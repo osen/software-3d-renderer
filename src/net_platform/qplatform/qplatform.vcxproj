@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E2329691-F602-4355-BF70-74489A0E59C3}</ProjectGuid>
-    <RootNamespace>qsoft</RootNamespace>
+    <ProjectGuid>{6D4A9AD8-76AE-4A72-86A7-308B3BC74CD4}</ProjectGuid>
+    <RootNamespace>qplatform</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -69,30 +69,57 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\qsoft\Debug.cpp" />
-    <ClCompile Include="..\..\qsoft\Matrix.cpp" />
-    <ClCompile Include="..\..\qsoft\Mesh.cpp" />
-    <ClCompile Include="..\..\qsoft\Renderer.cpp" />
-    <ClCompile Include="..\..\qsoft\Shadow.cpp" />
-    <ClCompile Include="..\..\qsoft\Texture.cpp" />
-    <ClCompile Include="..\..\qsoft\Util.cpp" />
-    <ClCompile Include="..\..\qsoft\Vector.cpp" />
-    <ClCompile Include="..\..\qsoft\Vertex.cpp" />
+    <ClCompile Include="..\..\qplatform\Audio.cpp" />
+    <ClCompile Include="..\..\qplatform\BoxCollider.cpp" />
+    <ClCompile Include="..\..\qplatform\Camera.cpp" />
+    <ClCompile Include="..\..\qplatform\Component.cpp" />
+    <ClCompile Include="..\..\qplatform\Entity.cpp" />
+    <ClCompile Include="..\..\qplatform\entry.cpp" />
+    <ClCompile Include="..\..\qplatform\Environment.cpp" />
+    <ClCompile Include="..\..\qplatform\Gui.cpp" />
+    <ClCompile Include="..\..\qplatform\Keyboard.cpp" />
+    <ClCompile Include="..\..\qplatform\MaterialGroup.cpp" />
+    <ClCompile Include="..\..\qplatform\Model.cpp" />
+    <ClCompile Include="..\..\qplatform\ModelRenderer.cpp" />
+    <ClCompile Include="..\..\qplatform\Part.cpp" />
+    <ClCompile Include="..\..\qplatform\Platform.cpp" />
+    <ClCompile Include="..\..\qplatform\Resource.cpp" />
+    <ClCompile Include="..\..\qplatform\Resources.cpp" />
+    <ClCompile Include="..\..\qplatform\Sound.cpp" />
+    <ClCompile Include="..\..\qplatform\SpriteRenderer.cpp" />
+    <ClCompile Include="..\..\qplatform\StaticModelCollider.cpp" />
+    <ClCompile Include="..\..\qplatform\Texture.cpp" />
+    <ClCompile Include="..\..\qplatform\Transform.cpp" />
+    <ClCompile Include="..\..\qplatform\tribox.cpp" />
+    <ClCompile Include="..\..\qplatform\Window.cpp" />
+    <ClCompile Include="..\..\qplatform\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\qsoft\Color.h" />
-    <ClInclude Include="..\..\qsoft\Debug.h" />
-    <ClInclude Include="..\..\qsoft\Face.h" />
-    <ClInclude Include="..\..\qsoft\Matrix.h" />
-    <ClInclude Include="..\..\qsoft\Mesh.h" />
-    <ClInclude Include="..\..\qsoft\qsoft.h" />
-    <ClInclude Include="..\..\qsoft\Renderer.h" />
-    <ClInclude Include="..\..\qsoft\Shadow.h" />
-    <ClInclude Include="..\..\qsoft\Texture.h" />
-    <ClInclude Include="..\..\qsoft\ThreadPool.h" />
-    <ClInclude Include="..\..\qsoft\Util.h" />
-    <ClInclude Include="..\..\qsoft\Vector.h" />
-    <ClInclude Include="..\..\qsoft\Vertex.h" />
+    <ClInclude Include="..\..\qplatform\Audio.h" />
+    <ClInclude Include="..\..\qplatform\BoxCollider.h" />
+    <ClInclude Include="..\..\qplatform\Camera.h" />
+    <ClInclude Include="..\..\qplatform\Component.h" />
+    <ClInclude Include="..\..\qplatform\config.h" />
+    <ClInclude Include="..\..\qplatform\Entity.h" />
+    <ClInclude Include="..\..\qplatform\Environment.h" />
+    <ClInclude Include="..\..\qplatform\Exception.h" />
+    <ClInclude Include="..\..\qplatform\Gui.h" />
+    <ClInclude Include="..\..\qplatform\Keyboard.h" />
+    <ClInclude Include="..\..\qplatform\MaterialGroup.h" />
+    <ClInclude Include="..\..\qplatform\Model.h" />
+    <ClInclude Include="..\..\qplatform\ModelRenderer.h" />
+    <ClInclude Include="..\..\qplatform\Part.h" />
+    <ClInclude Include="..\..\qplatform\Platform.h" />
+    <ClInclude Include="..\..\qplatform\qplatform.h" />
+    <ClInclude Include="..\..\qplatform\Resource.h" />
+    <ClInclude Include="..\..\qplatform\Resources.h" />
+    <ClInclude Include="..\..\qplatform\Sound.h" />
+    <ClInclude Include="..\..\qplatform\SpriteRenderer.h" />
+    <ClInclude Include="..\..\qplatform\StaticModelCollider.h" />
+    <ClInclude Include="..\..\qplatform\Texture.h" />
+    <ClInclude Include="..\..\qplatform\Transform.h" />
+    <ClInclude Include="..\..\qplatform\Window.h" />
+    <ClInclude Include="..\..\qplatform\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
