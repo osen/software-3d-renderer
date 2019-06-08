@@ -4,16 +4,34 @@ extern "C"
 {
 
 void PlatformInit();
+void PlatformTick();
+void PlatformDisplay(int width, int height, int type, unsigned char *buffer);
+void PlatformKeyDown(char key);
+void PlatformKeyUp(char key);
 
 }
 
-extern "C" __declspec(dllexport) void nativetest()
+extern "C" __declspec(dllexport) void native_platform_init()
 {
-  std::cout << "Hello World" << std::endl;
   PlatformInit();
 }
 
-extern "C" __declspec(dllexport) void nativearray(unsigned char *data)
+extern "C" __declspec(dllexport) void native_platform_tick()
 {
-  data[0] = 99;
+  PlatformTick();
+}
+
+extern "C" __declspec(dllexport) void native_platform_display(int width, int height, int format, unsigned char *buffer)
+{
+  PlatformDisplay(width, height, format, buffer);
+}
+
+extern "C" __declspec(dllexport) void native_platform_keydown(char key)
+{
+  PlatformKeyDown(key);
+}
+
+extern "C" __declspec(dllexport) void native_platform_keyup(char key)
+{
+  PlatformKeyUp(key);
 }

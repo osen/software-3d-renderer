@@ -79,6 +79,7 @@
     <ClCompile Include="..\..\blood\GameScreen.cpp" />
     <ClCompile Include="..\..\blood\HitBox.cpp" />
     <ClCompile Include="..\..\blood\main.cpp" />
+    <ClCompile Include="..\..\blood\Pickup.cpp" />
     <ClCompile Include="..\..\blood\Player.cpp" />
     <ClCompile Include="..\..\blood\SkyBox.cpp" />
     <ClCompile Include="..\..\blood\Zombie.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="..\..\blood\Fade.h" />
     <ClInclude Include="..\..\blood\GameScreen.h" />
     <ClInclude Include="..\..\blood\HitBox.h" />
+    <ClInclude Include="..\..\blood\Pickup.h" />
     <ClInclude Include="..\..\blood\Player.h" />
     <ClInclude Include="..\..\blood\SkyBox.h" />
     <ClInclude Include="..\..\blood\Zombie.h" />

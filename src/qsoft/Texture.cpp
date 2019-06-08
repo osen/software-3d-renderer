@@ -166,6 +166,10 @@ void Texture::setRaw(unsigned char *raw, int width, int height, int format)
     impl->rawBpp = 4;
     impl->rawBgr = true;
   }
+  else if(format == 6)
+  {
+    impl->rawBgr = true;
+  }
   else if(format == 13)
   {
     impl->rawStretch = true;
@@ -181,6 +185,13 @@ void Texture::setRaw(unsigned char *raw, int width, int height, int format)
     impl->rawBgr = true;
     impl->rawStretch = true;
   }
+  else if(format == 16)
+  {
+    impl->rawBgr = true;
+    impl->rawStretch = true;
+  }
+
+  //printf("%i %i %i\n", (int)impl->rawBpp, (int)impl->rawStretch, (int)impl->rawBgr);
 }
 
 }

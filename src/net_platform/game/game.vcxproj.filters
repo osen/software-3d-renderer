@@ -42,6 +42,9 @@
     <ClCompile Include="..\..\blood\Zombie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\blood\Pickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\blood\BongoCat.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\blood\Zombie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\blood\Pickup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
