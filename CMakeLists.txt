@@ -104,6 +104,7 @@ add_library(blood
   src/blood/HitBox.cpp
   src/blood/Fade.cpp
   src/blood/BongoCat.cpp
+  src/blood/Pickup.cpp
 )
 
 add_executable(sdl2_platform

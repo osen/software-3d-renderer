@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "SkyBox.h"
 #include "Zombie.h"
+#include "Pickup.h"
 
 void GameScreen::onInit()
 {
@@ -20,6 +21,10 @@ void GameScreen::onInit()
   addZombie(Vector3(12, 3, -32));
   addZombie(Vector3(12, 3, -50));
   addZombie(Vector3(0, 3, -50));
+
+  std::shared_ptr<Entity> e = getWorld()->addEntity();
+  e->getComponent<Transform>()->setPosition(Vector3(-4, 4, 0));
+  std::shared_ptr<Pickup> p = e->addComponent<Pickup>();
 }
 
 void GameScreen::addZombie(Vector3 position)
