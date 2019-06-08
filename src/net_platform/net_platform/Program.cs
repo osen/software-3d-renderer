@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.IO;
 
@@ -72,6 +73,7 @@ class Program : Form
     Width -= Width % 4;
 
     Graphics g = e.Graphics;
+    g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
     if(bm.Width != Width || bm.Height != Height)
     {
