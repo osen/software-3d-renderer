@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "Platform.h"
 #include "Window.h"
+#include "Font.h"
 
 std::sr1::shared_ptr<Gui> Gui::initialize(std::shared_ptr<Platform> platform)
 {
@@ -11,6 +12,25 @@ std::sr1::shared_ptr<Gui> Gui::initialize(std::shared_ptr<Platform> platform)
   return rtn;
 }
 
+void Gui::text(qsoft::Vector2 position, std::shared_ptr<Font> font,
+    std::string content)
+{
+  Glyph g;
+  qsoft::Vector4 p;
+
+  p.x = position.x;
+  p.y = position.x;
+
+  for(size_t i = 0; i < content.length(); i++)
+  {
+    g = font->getGlyph(content.at(i));
+    p.z = g.rect.z;
+    p.w = g.rect.w;
+
+    image(p, g.texture, g.rect);
+    p.x += p.z;
+  }
+}
 
 void Gui::image(qsoft::Vector4 position, std::shared_ptr<Texture> texture)
 {

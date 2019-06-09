@@ -20,6 +20,10 @@ void Player::onInit()
   std::shared_ptr<BoxCollider> bc = getEntity()->addComponent<BoxCollider>();
   bc->setSize(Vector3(1, 2, 1));
   bc->setOffset(Vector3(0, -1, 0));
+
+  //font = getResources()->load<Font>("fonts/tiny");
+  //font = getResources()->load<Font>("fonts/sum");
+  font = getResources()->load<Font>("fonts/creepy");
 }
 
 void Player::doAttack()
@@ -155,5 +159,7 @@ void Player::onGui()
 
     getGui()->image(clip, heart);
   }
+
+  getGui()->text(qsoft::Vector2(100, 100), font, "Hello World");
 }
 

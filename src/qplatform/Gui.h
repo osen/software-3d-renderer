@@ -6,6 +6,7 @@
 
 class Platform;
 class Texture;
+class Font;
 
 class Gui
 {
@@ -30,5 +31,8 @@ public:
     qsoft::Vector4 clip);
 
   void rectangle(qsoft::Vector4 rect, const qsoft::Color& color);
+
+  void text(qsoft::Vector2 position, std::shared_ptr<Font> font,
+    std::string content);
 
 };

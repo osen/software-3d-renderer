@@ -20,6 +20,7 @@
 #include "Gui.h"
 #include "Audio.h"
 #include "Sound.h"
+#include "Font.h"
 
 #include <qsoft/qsoft.h>
 

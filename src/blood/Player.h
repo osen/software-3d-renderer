@@ -11,6 +11,7 @@ class Player : public Component
   std::sr1::zero_initialized<float> speed;
   std::sr1::zero_initialized<float> health;
   std::sr1::zero_initialized<float> attack;
+  std::shared_ptr<Font> font;
 
   void onTick();
   void onGui();

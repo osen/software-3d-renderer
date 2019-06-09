@@ -20,6 +20,7 @@ class Resource
 public:
   std::shared_ptr<Platform> getPlatform();
   std::string getPath();
+  std::shared_ptr<Resources> getResources();
 
 };
 
