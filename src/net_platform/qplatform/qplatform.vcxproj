@@ -76,6 +76,7 @@
     <ClCompile Include="..\..\qplatform\Entity.cpp" />
     <ClCompile Include="..\..\qplatform\entry.cpp" />
     <ClCompile Include="..\..\qplatform\Environment.cpp" />
+    <ClCompile Include="..\..\qplatform\Font.cpp" />
     <ClCompile Include="..\..\qplatform\Gui.cpp" />
     <ClCompile Include="..\..\qplatform\Keyboard.cpp" />
     <ClCompile Include="..\..\qplatform\MaterialGroup.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="..\..\qplatform\Entity.h" />
     <ClInclude Include="..\..\qplatform\Environment.h" />
     <ClInclude Include="..\..\qplatform\Exception.h" />
+    <ClInclude Include="..\..\qplatform\Font.h" />
     <ClInclude Include="..\..\qplatform\Gui.h" />
     <ClInclude Include="..\..\qplatform\Keyboard.h" />
     <ClInclude Include="..\..\qplatform\MaterialGroup.h" />
