@@ -29,7 +29,7 @@ class Program : Form
   Program()
   {
     ClientSize = new Size(800, 600);
-    bm = new Bitmap(ClientSize.Width, ClientSize.Height, PixelFormat.Format24bppRgb);
+    bm = new Bitmap(320, 240, PixelFormat.Format24bppRgb);
 
     native_platform_init();
 
@@ -75,10 +75,10 @@ class Program : Form
     Graphics g = e.Graphics;
     g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
-    if(bm.Width != Width || bm.Height != Height)
-    {
-      bm = new Bitmap(Width, Height, PixelFormat.Format24bppRgb);
-    }
+    //if(bm.Width != Width || bm.Height != Height)
+    //{
+    //  bm = new Bitmap(Width, Height, PixelFormat.Format24bppRgb);
+    //}
 
     BitmapData da = bm.LockBits(new Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.WriteOnly, bm.PixelFormat);
     native_platform_display(Width, Height, 6, da.Scan0);

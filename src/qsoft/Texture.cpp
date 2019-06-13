@@ -74,30 +74,30 @@ void Texture::setPixel(int x, int y, const Color& color)
 
   unsigned char *raw = impl->raw;
 
-  double rw = 1;
-  double rh = 1;
+  double pw = 1;
+  double ph = 1;
 
   if(impl->rawStretch)
   {
-    rw = (float)impl->rawWidth / (float)impl->width;
-    rh = (float)impl->rawHeight / (float)impl->height;
-    x = x * rw;
-    y = y * rh;
-    rw ++;
-    rh ++;
+    pw = (float)impl->rawWidth / (float)impl->width;
+    ph = (float)impl->rawHeight / (float)impl->height;
+    x = x * pw;
+    y = y * ph;
+    pw ++;
+    ph ++;
   }
 
   int bpp = impl->rawBpp;
   bool bgr = impl->rawBgr;
 
-  for(int yi = 0; yi < rh; yi++)
+  for(int yi = 0; yi < ph; yi++)
   {
     if(y + yi >= impl->rawHeight) break;
 
     unsigned char *yp = raw + impl->rawWidth * bpp * (y + yi);
     unsigned char *xp = yp + x * bpp;
 
-    for(int xi = 0; xi < rw; xi++)
+    for(int xi = 0; xi < pw; xi++)
     {
       if(x + xi >= impl->rawWidth) break;
 
@@ -150,8 +150,8 @@ void Texture::setDepth(int x, int y, float depth)
 void Texture::setRaw(unsigned char *raw, int width, int height, int format)
 {
   impl->raw = raw;
-  impl->rawWidth = width;
-  impl->rawHeight = height;
+  impl->rawWidth = impl->width;
+  impl->rawHeight = impl->height;
 
   impl->rawBpp = 3;
   impl->rawStretch = false;
@@ -173,22 +173,30 @@ void Texture::setRaw(unsigned char *raw, int width, int height, int format)
   else if(format == 13)
   {
     impl->rawStretch = true;
+    impl->rawWidth = width;
+    impl->rawHeight = height;
   }
   else if(format == 14)
   {
     impl->rawBpp = 4;
     impl->rawStretch = true;
+    impl->rawWidth = width;
+    impl->rawHeight = height;
   }
   else if(format == 15)
   {
     impl->rawBpp = 4;
     impl->rawBgr = true;
     impl->rawStretch = true;
+    impl->rawWidth = width;
+    impl->rawHeight = height;
   }
   else if(format == 16)
   {
     impl->rawBgr = true;
     impl->rawStretch = true;
+    impl->rawWidth = width;
+    impl->rawHeight = height;
   }
 
   //printf("%i %i %i\n", (int)impl->rawBpp, (int)impl->rawStretch, (int)impl->rawBgr);
