@@ -10,7 +10,8 @@
 #include "Transform.h"
 #include "Camera.h"
 
-#define VISIBLE_HEIGHT 210
+//#define VISIBLE_HEIGHT 210
+#define VISIBLE_HEIGHT 240
 
 void ModelRenderer::onInit() { }
 

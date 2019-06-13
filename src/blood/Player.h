@@ -12,6 +12,8 @@ class Player : public Component
   std::sr1::zero_initialized<float> health;
   std::sr1::zero_initialized<float> attack;
   std::shared_ptr<Font> font;
+  std::shared_ptr<Texture> hudBar;
+  std::shared_ptr<Texture> hudIndent;
 
   void onTick();
   void onGui();

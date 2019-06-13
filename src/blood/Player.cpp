@@ -14,6 +14,9 @@ void Player::onInit()
   heart = getResources()->load<Texture>("sprites/heart");
   health = 100;
 
+  hudBar = getResources()->load<Texture>("ui/hud_bar");
+  hudIndent = getResources()->load<Texture>("ui/hud_indent");
+
   getEntity()->addComponent<Camera>();
   //getEntity()->addComponent<Fade>();
 
@@ -155,11 +158,30 @@ void Player::onGui()
 
     clip = Vector4(0, 0, heart->getWidth() * 3, heart->getHeight() * 3);
     clip.x = 10 + i * clip.z;
-    clip.y = getWindow()->getHeight() - 10 - clip.w;
+    //clip.y = getWindow()->getHeight() - 10 - clip.w;
+    clip.y = 0;
 
     getGui()->image(clip, heart);
   }
 
-  getGui()->text(qsoft::Vector2(100, 100), font, "Hello World");
+  std::string health = "43";
+  //std::string health = "100";
+
+  clip.z = font->getWidth("000") + 30;
+  clip.w = font->getHeight() + 30;
+  clip.x = 0;
+  clip.y = getWindow()->getHeight() - clip.w;
+  getGui()->image(clip, hudBar);
+
+  //clip.x = clip.z;
+  //getGui()->image(clip, hudBar);
+
+  clip.x += 10;
+  clip.y = clip.y + clip.w / 2 - font->getHeight() / 2;
+  clip.z -= 20;
+  clip.w = font->getHeight();
+  getGui()->image(clip, hudIndent);
+
+  getGui()->text(qsoft::Vector2(clip.x + clip.z / 2 - font->getWidth(health) / 2, clip.y), font, health);
 }
 

@@ -19,7 +19,7 @@ void Gui::text(qsoft::Vector2 position, std::shared_ptr<Font> font,
   qsoft::Vector4 p;
 
   p.x = position.x;
-  p.y = position.x;
+  p.y = position.y;
 
   for(size_t i = 0; i < content.length(); i++)
   {
@@ -28,7 +28,7 @@ void Gui::text(qsoft::Vector2 position, std::shared_ptr<Font> font,
     p.w = g.rect.w;
 
     image(p, g.texture, g.rect);
-    p.x += p.z;
+    p.x += p.z + 1;
   }
 }
 

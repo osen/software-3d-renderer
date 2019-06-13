@@ -80,14 +80,22 @@ bool Font::dirtyColumn(int x)
   return false;
 }
 
-int Font::getWidth(const std::string& dample)
+int Font::getWidth(const std::string& sample)
 {
-  return 1;
+  int width = 0;
+
+  for(size_t i = 0; i < sample.length(); i++)
+  {
+    Glyph g = getGlyph(sample.at(i));
+    width += g.rect.z + 1;
+  }
+
+  return width;
 }
 
 int Font::getHeight()
 {
-  return 1;
+  return getGlyph('a').rect.w;
 }
 
 Glyph Font::getGlyph(char c)
