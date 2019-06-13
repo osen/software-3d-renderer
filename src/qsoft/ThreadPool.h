@@ -1,7 +1,3 @@
-#ifdef _WIN32
-  #define THREADPOOL_DISABLE
-#endif
-
 #ifdef STD_SR1_DEBUG
   #define THREADPOOL_DISABLE
 #endif
@@ -9,8 +5,14 @@
 #define THREADPOOL_THREADS 4
 
 #ifndef THREADPOOL_DISABLE
-  #include <pthread.h>
-  #include <semaphore.h>
+  #ifdef _WIN32
+    #define WIN32_LEAN_AND_MEAN
+    #define NOMINMAX
+    #include <windows.h>
+  #else
+    #include <pthread.h>
+    #include <semaphore.h>
+  #endif
 #endif
 
 #include <vector>
@@ -26,9 +28,15 @@ class ThreadUnit
 private:
   T t;
 #ifndef THREADPOOL_DISABLE
+  #ifdef _WIN32
+  HANDLE thread;
+  HANDLE start;
+  HANDLE stop;
+  #else
   pthread_t thread;
   sem_t start;
   sem_t stop;
+  #endif
 #endif
   ThreadPool<T> *tp;
 
@@ -52,6 +60,28 @@ public:
       it->tp = this;
 
 #ifndef THREADPOOL_DISABLE
+  #ifdef _WIN32
+      it->start = CreateSemaphore(NULL, 0, 1, NULL);
+
+      if(it->start == NULL)
+      {
+        throw std::exception();
+      }
+
+      it->stop = CreateSemaphore(NULL, 0, 1, NULL);
+
+      if(it->stop == NULL)
+      {
+        throw std::exception();
+      }
+
+      it->thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)entry, (LPVOID)(void *)&(*it), 0, NULL);
+
+      if(it->thread == NULL)
+      {
+        throw std::exception();
+      }
+  #else
       if(sem_init(&it->start, 0, 0) == -1)
       {
         throw std::exception();
@@ -68,6 +98,7 @@ public:
         it->thread = pthread_self();
         throw std::exception();
       }
+  #endif
 #endif
     }
   }
@@ -80,10 +111,18 @@ public:
     for(typename std::vector<ThreadUnit<T> >::iterator it =
       units.begin(); it != units.end(); it++)
     {
+  #ifdef _WIN32
+      ReleaseSemaphore(it->start, 1, NULL);
+      WaitForSingleObject(it->thread, INFINITE);
+      CloseHandle(it->thread);
+      CloseHandle(it->start);
+      CloseHandle(it->stop);
+  #else
       sem_post(&it->start);
       pthread_join(it->thread, NULL);
       sem_destroy(&it->start);
       sem_destroy(&it->stop);
+  #endif
     }
 #endif
   }
@@ -106,18 +145,26 @@ public:
     for(typename std::vector<ThreadUnit<T> >::iterator it =
       units.begin(); it != units.end(); it++)
     {
+  #ifdef _WIN32
+      ReleaseSemaphore(it->start, 1, NULL);
+  #else
       sem_post(&it->start);
+  #endif
     }
 
     for(typename std::vector<ThreadUnit<T> >::iterator it =
       units.begin(); it != units.end(); it++)
     {
+  #ifdef _WIN32
+      WaitForSingleObject(it->stop, INFINITE);
+  #else
       sem_wait(&it->stop);
+  #endif
     }
+
 #else
     func(units.at(0).t);
 #endif
-
     this->func = NULL;
   }
 
@@ -126,13 +173,21 @@ private:
   void (*func)(T& t);
 
 #ifndef THREADPOOL_DISABLE
+#ifdef _WIN32
+  static DWORD WINAPI entry(LPVOID ptr)
+#else
   static void *entry(void *ptr)
+#endif
   {
     ThreadUnit<T> *tu = (ThreadUnit<T> *)ptr;
 
     while(true)
     {
+  #ifdef _WIN32
+      WaitForSingleObject(tu->start, INFINITE);
+  #else
       sem_wait(&tu->start);
+  #endif
 
       if(!tu->tp->func)
       {
@@ -143,7 +198,11 @@ private:
         tu->tp->func(tu->t);
       }
 
+  #ifdef _WIN32
+      ReleaseSemaphore(tu->stop, 1, NULL);
+  #else
       sem_post(&tu->stop);
+  #endif
     }
 
     return NULL;
