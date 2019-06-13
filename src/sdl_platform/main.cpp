@@ -1,5 +1,8 @@
 #include <SDL/SDL.h>
-#include <emscripten.h>
+
+#ifdef __EMSCRIPTEN__
+  #include <emscripten.h>
+#endif
 
 #include <vector>
 #include <iostream>
@@ -18,18 +21,20 @@ extern "C"
 
 std::vector<unsigned char> buffer;
 SDL_Surface* screen;
+bool quit;
 
 void emloop()
 {
   SDL_Event event = {0};
-  bool quit = false;
 
   while(SDL_PollEvent(&event))
   {
     if(event.type == SDL_QUIT)
     {
       quit = true;
+#ifdef __EMSCRIPTEN__
       abort();
+#endif
     }
     else if(event.type == SDL_KEYDOWN)
     {
@@ -90,7 +95,14 @@ int main()
   //  std::cout << "Exception: " << e.what() << std::endl;
   //}
 
+#ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(emloop, 0, 1);
+#else
+  while(!quit)
+  {
+    emloop();
+  }
+#endif
 
   return 0;
 }
