@@ -5,8 +5,9 @@ namespace qsoft
 
 struct Color;
 
-struct Texture
+class Texture
 {
+public:
   static std::sr1::shared_ptr<Texture> create(int width, int height);
 
   virtual void clear() = 0;

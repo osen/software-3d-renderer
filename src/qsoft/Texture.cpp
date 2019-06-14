@@ -137,8 +137,8 @@ struct TextureImpl : public Texture
   void setRaw(unsigned char *raw, int width, int height, int format)
   {
     this->raw = raw;
-    rawWidth = width;
-    rawHeight = height;
+    rawWidth = this->width;
+    rawHeight = this->height;
 
     rawBpp = 3;
     rawStretch = false;
