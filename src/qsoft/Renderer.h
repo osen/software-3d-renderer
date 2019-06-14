@@ -17,11 +17,11 @@ public:
   Renderer();
 
   void setMesh(const Mesh& mesh);
-  void setTexture(const Texture& texture);
+  void setTexture(const std::sr1::shared_ptr<Texture>& texture);
   void setView(const Matrix& view);
   void setModel(const Matrix& model);
   void setViewport(int x, int y, int width, int height);
-  void setTarget(const Texture& target);
+  void setTarget(const std::sr1::shared_ptr<Texture>& target);
   void setProjection(const Matrix& projection);
   void render();
 

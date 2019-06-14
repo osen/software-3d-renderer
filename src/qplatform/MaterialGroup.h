@@ -1,7 +1,7 @@
 #include <qsoft/qsoft.h>
 
 #include <vector>
-#include <memory>
+#include <sr1/memory>
 
 class ModelRenderer;
 class Texture;
@@ -14,10 +14,10 @@ class MaterialGroup
   friend class StaticModelCollider;
 
   qsoft::Mesh mesh;
-  std::shared_ptr<Texture> texture;
+  std::sr1::shared_ptr<Texture> texture;
 
 public:
   void addFace(qsoft::Face& f);
-  void setTexture(std::shared_ptr<Texture> texture);
+  void setTexture(std::sr1::shared_ptr<Texture> texture);
 
 };

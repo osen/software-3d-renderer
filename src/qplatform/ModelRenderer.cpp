@@ -81,7 +81,7 @@ void ModelRenderer::onDisplay()
       //  continue;
       //}
 
-      r->setTexture(*mg->texture->data);
+      r->setTexture(mg->texture->data);
       r->setMesh(mg->mesh);
       r->setViewport(0, 0, 320, VISIBLE_HEIGHT);
       //r->setViewport(0, 0, 320, 240);

@@ -3,26 +3,21 @@
 namespace qsoft
 {
 
-struct TextureImpl;
 struct Color;
 
-class Texture
+struct Texture
 {
-  std::sr1::shared_ptr<TextureImpl> impl;
+  static std::sr1::shared_ptr<Texture> create(int width, int height);
 
-public:
-  Texture();
-  Texture(int width, int height);
+  virtual void clear() = 0;
+  virtual void setPixel(int x, int y, const Color& color) = 0;
+  virtual Color getPixel(int x, int y) = 0;
+  virtual int getWidth() const = 0;
+  virtual int getHeight() const = 0;
+  virtual float getDepth(int x, int y) = 0;
+  virtual void setDepth(int x, int y, float depth) = 0;
 
-  void clear();
-  void setPixel(int x, int y, const Color& color);
-  Color getPixel(int x, int y);
-  int getWidth() const;
-  int getHeight() const;
-  float getDepth(int x, int y);
-  void setDepth(int x, int y, float depth);
-
-  void setRaw(unsigned char *raw, int width, int height, int format);
+  virtual void setRaw(unsigned char *raw, int width, int height, int format) = 0;
 
 };
 

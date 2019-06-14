@@ -35,11 +35,11 @@ struct RendererUnit
 struct RendererImpl
 {
   Mesh mesh;
-  Texture texture;
+  std::sr1::shared_ptr<Texture> texture;
   Matrix view;
   Matrix model;
   Matrix projection;
-  Texture target;
+  std::sr1::shared_ptr<Texture> target;
   Matrix viewport;
   Vector2 viewportSize;
 
@@ -68,19 +68,19 @@ void Renderer::setMesh(const Mesh& mesh)
   impl->mesh = mesh;
 }
 
-void Renderer::setTexture(const Texture& texture)
+void Renderer::setTexture(const std::sr1::shared_ptr<Texture>& texture)
 {
   impl->texture = texture;
 }
 
-void Renderer::setTarget(const Texture& target)
+void Renderer::setTarget(const std::sr1::shared_ptr<Texture>& target)
 {
   impl->target = target;
 
   impl->viewport = Matrix::viewport(0, 0,
-    target.getWidth(), target.getHeight());
+    target->getWidth(), target->getHeight());
 
-  impl->viewportSize = Vector2(target.getWidth(), target.getHeight());
+  impl->viewportSize = Vector2(target->getWidth(), target->getHeight());
 }
 
 void Renderer::setView(const Matrix& view)
@@ -190,6 +190,8 @@ void RendererImpl::clipPolyComponent(std::vector<Vertex>& vertices,
 
 void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
 {
+  Texture& tgt = *target;
+  Texture& txt = *texture;
   Vector2 bboxmin( std::numeric_limits<float>::max(),  std::numeric_limits<float>::max());
   Vector2 bboxmax(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
   Vector2 clamp(viewportSize.x - 1, viewportSize.y - 1);
@@ -249,21 +251,11 @@ void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
       );
 
       float depth = bc_clip.x + bc_clip.y + bc_clip.z;
-      bool cont = true;
-      float lastDepth = 0;
 
-      #pragma omp critical
+      if(tgt.getDepth(px, py) > depth)
       {
-        lastDepth = target.getDepth(px, py);
-
-        if(lastDepth < depth)
-        {
-          target.setDepth(px, py, depth);
-          cont = false;
-        }
+        continue;
       }
-
-      if(cont) continue;
 
       float u = (a.texCoord.x * bc_clip.x + b.texCoord.x * bc_clip.y + c.texCoord.x * bc_clip.z) /
         (bc_clip.x + bc_clip.y + bc_clip.z);
@@ -291,23 +283,26 @@ void RendererImpl::triangle(const Vertex& a, const Vertex& b, const Vertex& c)
         v -= 1.0f;
       }
 
-      int tx = (int)(u * (float)(texture.getWidth() - 1) + 0.5f);
-      int ty = (int)(v * (float)(texture.getHeight() - 1) + 0.5f);
-      Color frag = texture.getPixel(tx, ty);
+      int tx = (int)(u * (float)(txt.getWidth() - 1) + 0.5f);
+      int ty = (int)(v * (float)(txt.getHeight() - 1) + 0.5f);
+      Color frag = txt.getPixel(tx, ty);
 
       if(frag.a == 0)
       {
-        target.setDepth(px, py, lastDepth);
         continue;
       }
 
-      //int tx = (int)(u * (float)texture.getWidth());
-      //int ty = (int)(v * (float)texture.getHeight());
-      target.setPixel(px, py, frag);
+      target->setDepth(px, py, depth);
+
+      //tgt.setDepth(px, py, depth);
+
+      //int tx = (int)(u * (float)txt.getWidth());
+      //int ty = (int)(v * (float)txt.getHeight());
+      tgt.setPixel(px, py, frag);
 
       // TODO: If !texture?
-      // target.setPixel(px, py, Color(0, 255, 0));
-      //target.setPixel(px, py, Color(v * 255, 255, 255));
+      // tgt.setPixel(px, py, Color(0, 255, 0));
+      //tgt.setPixel(px, py, Color(v * 255, 255, 255));
     }
   }
 }

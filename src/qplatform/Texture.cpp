@@ -24,7 +24,7 @@ void Texture::onLoad(std::string path)
     throw Exception("Failed to load '" + path + "'");
   }
 
-  data = std::make_shared<qsoft::Texture>(w, h);
+  data = qsoft::Texture::create(w, h);
   unsigned char *p = raw;
 
   for(size_t y = 0; y < h; y++)
@@ -61,5 +61,5 @@ qsoft::Color Texture::getPixel(int x, int y)
 
 void Texture::onCreate(int width, int height)
 {
-  data = std::make_shared<qsoft::Texture>(width, height);
+  data = qsoft::Texture::create(width, height);
 }

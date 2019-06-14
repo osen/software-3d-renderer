@@ -1,7 +1,7 @@
 #include <qsoft/qsoft.h>
 
 #include <sr1/zero_initialized>
-#include <memory>
+#include <sr1/memory>
 
 class Platform;
 class Camera;
@@ -16,7 +16,7 @@ public:
   int getHeight();
   std::shared_ptr<qsoft::Renderer> getRenderer();
   std::shared_ptr<Camera> getCurrentCamera();
-  std::shared_ptr<qsoft::Texture> getBuffer();
+  std::sr1::shared_ptr<qsoft::Texture> getBuffer();
   std::sr1::shared_ptr<qsoft::Shadow> getShadow();
 
 private:
@@ -27,7 +27,7 @@ private:
 
   std::weak_ptr<Camera> currentCamera;
 
-  std::shared_ptr<qsoft::Texture> buffer;
+  std::sr1::shared_ptr<qsoft::Texture> buffer;
   std::shared_ptr<qsoft::Renderer> renderer;
   std::sr1::shared_ptr<qsoft::Shadow> shadow;
 

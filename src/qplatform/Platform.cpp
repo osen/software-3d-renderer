@@ -93,7 +93,7 @@ void Platform::display(int width, int height, int type, unsigned char *buffer)
 
   //getWindow()->getShadow()->setRaw(buffer, width, height, type);
 
-  std::shared_ptr<qsoft::Texture> b = window->buffer;
+  std::sr1::shared_ptr<qsoft::Texture> b = window->buffer;
   b->clear();
   b->setRaw(buffer, width, height, type);
 

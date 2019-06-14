@@ -91,7 +91,7 @@ void SpriteRenderer::onDisplay()
 
   r->setModel(getTransform()->getModelMatrix());
 
-  r->setTexture(*texture->data);
+  r->setTexture(texture->data);
   r->setMesh(mesh);
   r->render();
 }
