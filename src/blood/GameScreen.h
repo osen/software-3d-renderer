@@ -4,9 +4,9 @@
 
 class GameScreen : public Component
 {
-  std::shared_ptr<Model> model;
-  std::shared_ptr<ModelRenderer> modelRenderer;
-  std::shared_ptr<StaticModelCollider> smc;
+  std::sr1::shared_ptr<Model> model;
+  std::sr1::shared_ptr<ModelRenderer> modelRenderer;
+  std::sr1::shared_ptr<StaticModelCollider> smc;
 
   void addSprite(std::string path, Vector3 position);
   void addZombie(Vector3 position);

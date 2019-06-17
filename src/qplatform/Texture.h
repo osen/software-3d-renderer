@@ -2,7 +2,7 @@
 
 #include <qsoft/qsoft.h>
 
-#include <memory>
+#include <sr1/memory>
 
 class ModelRenderer;
 class SpriteRenderer;
@@ -12,7 +12,7 @@ class Texture : public Resource
   friend class ModelRenderer;
   friend class SpriteRenderer;
 
-  std::shared_ptr<qsoft::Texture> data;
+  std::sr1::shared_ptr<qsoft::Texture> data;
 
   void onLoad(std::string path);
 

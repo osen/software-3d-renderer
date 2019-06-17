@@ -4,7 +4,7 @@
 #include "Window.h"
 #include "Font.h"
 
-std::sr1::shared_ptr<Gui> Gui::initialize(std::shared_ptr<Platform> platform)
+std::sr1::shared_ptr<Gui> Gui::initialize(std::sr1::shared_ptr<Platform> platform)
 {
   std::sr1::shared_ptr<Gui> rtn = std::sr1::make_shared<Gui>();
   rtn->platform = platform;
@@ -12,7 +12,7 @@ std::sr1::shared_ptr<Gui> Gui::initialize(std::shared_ptr<Platform> platform)
   return rtn;
 }
 
-void Gui::text(qsoft::Vector2 position, std::shared_ptr<Font> font,
+void Gui::text(qsoft::Vector2 position, std::sr1::shared_ptr<Font> font,
     std::string content)
 {
   Glyph g;
@@ -32,14 +32,14 @@ void Gui::text(qsoft::Vector2 position, std::shared_ptr<Font> font,
   }
 }
 
-void Gui::image(qsoft::Vector4 position, std::shared_ptr<Texture> texture)
+void Gui::image(qsoft::Vector4 position, std::sr1::shared_ptr<Texture> texture)
 {
   image(position,
     texture,
     qsoft::Vector4(0, 0, texture->getWidth(), texture->getHeight()));
 }
 
-void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture)
+void Gui::image(qsoft::Vector2 position, std::sr1::shared_ptr<Texture> texture)
 {
   image(qsoft::Vector4(position.x, position.y,
     texture->getWidth(), texture->getHeight()),
@@ -47,7 +47,7 @@ void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture)
     qsoft::Vector4(0, 0, texture->getWidth(), texture->getHeight()));
 }
 
-void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture,
+void Gui::image(qsoft::Vector2 position, std::sr1::shared_ptr<Texture> texture,
   qsoft::Vector4 clip)
 {
   image(qsoft::Vector4(position.x, position.y,
@@ -56,7 +56,7 @@ void Gui::image(qsoft::Vector2 position, std::shared_ptr<Texture> texture,
 
 void Gui::rectangle(qsoft::Vector4 rect, const qsoft::Color& color)
 {
-  std::shared_ptr<qsoft::Texture> buffer =
+  std::sr1::shared_ptr<qsoft::Texture> buffer =
     platform.lock()->getWindow()->getBuffer();
 
   for(size_t y = 0; y < rect.w; y++)
@@ -70,17 +70,17 @@ void Gui::rectangle(qsoft::Vector4 rect, const qsoft::Color& color)
 
 qsoft::Vector2 Gui::getRatio()
 {
-  std::shared_ptr<Window> w = platform.lock()->getWindow();
+  std::sr1::shared_ptr<Window> w = platform.lock()->getWindow();
 
   return qsoft::Vector2(
     (float)w->getBuffer()->getWidth() / (float)w->getWidth(),
     (float)w->getBuffer()->getHeight() / (float)w->getHeight());
 }
 
-void Gui::image(qsoft::Vector4 position, std::shared_ptr<Texture> texture,
+void Gui::image(qsoft::Vector4 position, std::sr1::shared_ptr<Texture> texture,
   qsoft::Vector4 clip)
 {
-  std::shared_ptr<qsoft::Texture> buffer =
+  std::sr1::shared_ptr<qsoft::Texture> buffer =
     platform.lock()->getWindow()->getBuffer();
 
   qsoft::Vector2 r = getRatio();

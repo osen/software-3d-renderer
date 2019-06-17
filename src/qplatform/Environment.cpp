@@ -18,9 +18,9 @@ std::string Environment::getDataPath()
   return "data";
 }
 
-std::shared_ptr<Environment> Environment::initialize()
+std::sr1::shared_ptr<Environment> Environment::initialize()
 {
-  std::shared_ptr<Environment> rtn = std::make_shared<Environment>();
+  std::sr1::shared_ptr<Environment> rtn = std::sr1::make_shared<Environment>();
 
   //rtn->lastTime = SDL_GetTicks();
 

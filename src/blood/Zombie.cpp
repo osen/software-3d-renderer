@@ -28,14 +28,14 @@ void Zombie::activate()
 
 void Zombie::checkHits()
 {
-  std::vector<std::shared_ptr<Entity> > entities;
+  std::vector<std::sr1::shared_ptr<Entity> > entities;
 
   getWorld()->getEntities<HitBox>(entities);
 
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = entities.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = entities.begin();
     it != entities.end(); it++)
   {
-    std::shared_ptr<HitBox> hb = (*it)->getComponent<HitBox>();
+    std::sr1::shared_ptr<HitBox> hb = (*it)->getComponent<HitBox>();
 
     //if(hb->getOwner() == getEntity()) continue;
     if(hb->getOwner() != getWorld()->getEntity<Player>()) continue;
@@ -58,7 +58,7 @@ void Zombie::checkHits()
 
 void Zombie::onTick()
 {
-  std::shared_ptr<Entity> pe = getWorld()->getEntity<Player>();
+  std::sr1::shared_ptr<Entity> pe = getWorld()->getEntity<Player>();
   Vector3 diff = getTransform()->getPosition() - pe->getTransform()->getPosition();
   float len = fabs(diff.x) + fabs(diff.y) + fabs(diff.z);
 
@@ -70,7 +70,7 @@ void Zombie::onTick()
     }
   }
 
-  std::shared_ptr<StaticModelCollider> smc = getWorld()->getEntity<StaticModelCollider>()->getComponent<StaticModelCollider>();
+  std::sr1::shared_ptr<StaticModelCollider> smc = getWorld()->getEntity<StaticModelCollider>()->getComponent<StaticModelCollider>();
 
   getTransform()->lookAt(pe->getTransform()->getPosition());
 
@@ -153,7 +153,7 @@ void Zombie::onTick()
 
 void Zombie::doAttack()
 {
-  std::shared_ptr<Entity> hbe = getWorld()->addEntity();
+  std::sr1::shared_ptr<Entity> hbe = getWorld()->addEntity();
   hbe->getTransform()->setRotation(getTransform()->getRotation());
   hbe->getTransform()->setPosition(getTransform()->getPosition());
   hbe->getTransform()->translate(Vector3(0, 0, 1));

@@ -15,33 +15,33 @@
 
 void ModelRenderer::onInit() { }
 
-void ModelRenderer::onInit(std::shared_ptr<Model> model)
+void ModelRenderer::onInit(std::sr1::shared_ptr<Model> model)
 {
   onInit();
   setModel(model);
 }
 
-void ModelRenderer::setModel(std::shared_ptr<Model> model)
+void ModelRenderer::setModel(std::sr1::shared_ptr<Model> model)
 {
   this->model = model;
 }
 
-std::shared_ptr<Model> ModelRenderer::getModel()
+std::sr1::shared_ptr<Model> ModelRenderer::getModel()
 {
   return model;
 }
 
 void ModelRenderer::onDisplay()
 {
-  std::shared_ptr<qsoft::Renderer> r = getPlatform()->getWindow()->getRenderer();
-  std::shared_ptr<Window> w = getWindow();
+  std::sr1::shared_ptr<qsoft::Renderer> r = getPlatform()->getWindow()->getRenderer();
+  std::sr1::shared_ptr<Window> w = getWindow();
   //r->setProjection(qsoft::Matrix::perspective(65.0f, (float)w->getWidth() / (float)w->getHeight(), 0.01f, 100.0f));
 
   r->setProjection(qsoft::Matrix::perspective(65.0f,
     (float)w->getWidth() / (float)((w->getHeight() / 240.0f) * (float)VISIBLE_HEIGHT),
     0.01f, 100.0f));
 
-  std::shared_ptr<Camera> camera = getWindow()->getCurrentCamera();
+  std::sr1::shared_ptr<Camera> camera = getWindow()->getCurrentCamera();
   //camera.reset();
 
   if(!camera)
@@ -53,7 +53,7 @@ void ModelRenderer::onDisplay()
   }
   else
   {
-    std::shared_ptr<Transform> t = camera->getTransform();
+    std::sr1::shared_ptr<Transform> t = camera->getTransform();
     r->setView(qsoft::Matrix::inverse(t->getModelMatrix()));
   }
 
@@ -68,12 +68,12 @@ void ModelRenderer::onDisplay()
 
   r->setModel(getTransform()->getModelMatrix());
 
-  for(std::vector<std::shared_ptr<Part> >::iterator pit = model->parts.begin();
+  for(std::vector<std::sr1::shared_ptr<Part> >::iterator pit = model->parts.begin();
     pit != model->parts.end(); pit++)
   {
     for(size_t mgi = 0; mgi < (*pit)->getMaterialGroupCount(); mgi++)
     {
-      std::shared_ptr<MaterialGroup> mg = (*pit)->getMaterialGroup(mgi);
+      std::sr1::shared_ptr<MaterialGroup> mg = (*pit)->getMaterialGroup(mgi);
 
       //if(!mg->texture)
       //if(mg->texture == getResources()->getDefaultTexture())

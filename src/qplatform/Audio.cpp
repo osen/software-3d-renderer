@@ -2,7 +2,7 @@
 #include "Sound.h"
 
 std::sr1::shared_ptr<Audio> Audio::initialize(
-  std::shared_ptr<Platform>& platform)
+  std::sr1::shared_ptr<Platform>& platform)
 {
   std::sr1::shared_ptr<Audio> rtn = std::sr1::make_shared<Audio>();
   rtn->platform = platform;
@@ -73,7 +73,7 @@ void Audio::tick()
 #endif
 }
 
-void Audio::playSound(std::shared_ptr<Sound> sound)
+void Audio::playSound(std::sr1::shared_ptr<Sound> sound)
 {
 #ifndef _WIN32
   ALuint sid = 0;

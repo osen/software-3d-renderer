@@ -63,30 +63,30 @@ void SpriteRenderer::setFrame(int column, int row)
   updateMesh();
 }
 
-void SpriteRenderer::onInit(std::shared_ptr<Texture> texture)
+void SpriteRenderer::onInit(std::sr1::shared_ptr<Texture> texture)
 {
   onInit();
   setTexture(texture);
 }
 
-void SpriteRenderer::setTexture(std::shared_ptr<Texture> texture)
+void SpriteRenderer::setTexture(std::sr1::shared_ptr<Texture> texture)
 {
   this->texture = texture;
 }
 
-std::shared_ptr<Texture> SpriteRenderer::getTexture()
+std::sr1::shared_ptr<Texture> SpriteRenderer::getTexture()
 {
   return texture;
 }
 
 void SpriteRenderer::onDisplay()
 {
-  std::shared_ptr<qsoft::Renderer> r = getPlatform()->getWindow()->getRenderer();
-  std::shared_ptr<Window> w = getWindow();
+  std::sr1::shared_ptr<qsoft::Renderer> r = getPlatform()->getWindow()->getRenderer();
+  std::sr1::shared_ptr<Window> w = getWindow();
   r->setProjection(qsoft::Matrix::perspective(65.0f, (float)w->getWidth() / (float)w->getHeight(), 0.01f, 100.0f));
 
-  std::shared_ptr<Camera> camera = getWindow()->getCurrentCamera();
-  std::shared_ptr<Transform> t = camera->getTransform();
+  std::sr1::shared_ptr<Camera> camera = getWindow()->getCurrentCamera();
+  std::sr1::shared_ptr<Transform> t = camera->getTransform();
   r->setView(qsoft::Matrix::inverse(t->getModelMatrix()));
 
   r->setModel(getTransform()->getModelMatrix());

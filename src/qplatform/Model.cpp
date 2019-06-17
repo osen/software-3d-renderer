@@ -14,7 +14,7 @@
 struct Material
 {
   std::string name;
-  std::shared_ptr<Texture> texture;
+  std::sr1::shared_ptr<Texture> texture;
 };
 
 void Model::splitStringWhitespace(std::string& input, std::vector<std::string>& output)
@@ -87,11 +87,11 @@ void Model::onLoad(std::string path)
   std::vector<qsoft::Vector3> positions;
   std::vector<qsoft::Vector2> texCoords;
   std::vector<qsoft::Vector3> normals;
-  std::vector<std::shared_ptr<Material> > materials;
+  std::vector<std::sr1::shared_ptr<Material> > materials;
 
-  std::shared_ptr<Part> part;
-  std::shared_ptr<MaterialGroup> mg;
-  std::shared_ptr<Material> material;
+  std::sr1::shared_ptr<Part> part;
+  std::sr1::shared_ptr<MaterialGroup> mg;
+  std::sr1::shared_ptr<Material> material;
 
   while(!file.eof())
   {
@@ -124,14 +124,14 @@ void Model::onLoad(std::string path)
     {
       if(!part)
       {
-        part = std::make_shared<Part>();
+        part = std::sr1::make_shared<Part>();
         part->name = "Default";
         parts.push_back(part);
       }
 
       if(!mg)
       {
-        mg = std::make_shared<MaterialGroup>();
+        mg = std::sr1::make_shared<MaterialGroup>();
         mg->setTexture(material->texture);
         part->addMaterialGroup(mg);
       }
@@ -177,7 +177,7 @@ void Model::onLoad(std::string path)
     {
       material.reset();
 
-      for(std::vector<std::shared_ptr<Material> >::iterator mit = materials.begin();
+      for(std::vector<std::sr1::shared_ptr<Material> >::iterator mit = materials.begin();
         mit != materials.end(); mit++)
       {
         if((*mit)->name == splitLine.at(1))
@@ -194,18 +194,18 @@ void Model::onLoad(std::string path)
 
       if(!part)
       {
-        part = std::make_shared<Part>();
+        part = std::sr1::make_shared<Part>();
         part->name = "Default";
         parts.push_back(part);
       }
 
-      mg = std::make_shared<MaterialGroup>();
+      mg = std::sr1::make_shared<MaterialGroup>();
       mg->setTexture(material->texture);
       part->addMaterialGroup(mg);
     }
     else if(splitLine.at(0) == "o" || splitLine.at(0) == "g")
     {
-      part = std::make_shared<Part>();
+      part = std::sr1::make_shared<Part>();
       part->name = splitLine.at(1);
       parts.push_back(part);
       mg.reset();
@@ -236,7 +236,7 @@ void Model::onLoad(std::string path)
 }
 
 void Model::processMtl(std::string path,
-  std::vector<std::shared_ptr<Material> >& materials)
+  std::vector<std::sr1::shared_ptr<Material> >& materials)
 {
   std::ifstream file(std::string(path).c_str());
 
@@ -265,7 +265,7 @@ void Model::processMtl(std::string path,
 
   std::string line;
   std::vector<std::string> splitLine;
-  std::shared_ptr<Material> material;
+  std::sr1::shared_ptr<Material> material;
 
   while(!file.eof())
   {
@@ -276,7 +276,7 @@ void Model::processMtl(std::string path,
 
     if(splitLine.at(0) == "newmtl")
     {
-      material = std::make_shared<Material>();
+      material = std::sr1::make_shared<Material>();
       materials.push_back(material);
       material->name = splitLine.at(1);
       material->texture = getPlatform()->getResources()->getDefaultTexture();

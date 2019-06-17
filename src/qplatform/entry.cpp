@@ -2,7 +2,7 @@
 
 #include <memory>
 
-std::shared_ptr<Platform> p;
+std::sr1::shared_ptr<Platform> p;
 
 extern "C"
 {

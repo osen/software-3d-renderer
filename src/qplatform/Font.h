@@ -13,12 +13,12 @@ struct Glyph
 {
   std::sr1::zero_initialized<char> c;
   qsoft::Vector4 rect;
-  std::shared_ptr<Texture> texture;
+  std::sr1::shared_ptr<Texture> texture;
 };
 
 class Font : public Resource
 {
-  std::shared_ptr<Texture> texture;
+  std::sr1::shared_ptr<Texture> texture;
   std::vector<Glyph> glyphs;
 
   void onLoad(std::string path);

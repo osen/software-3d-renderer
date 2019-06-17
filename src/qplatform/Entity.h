@@ -5,8 +5,8 @@
 
 #include <sr1/noncopyable>
 #include <sr1/zero_initialized>
+#include <sr1/memory>
 
-#include <memory>
 #include <vector>
 
 class Component;
@@ -14,7 +14,7 @@ class Platform;
 class Transform;
 
 #define ENTITY_ADDCOMPONENT \
-  std::shared_ptr<T> rtn = std::make_shared<T>(); \
+  std::sr1::shared_ptr<T> rtn = std::sr1::make_shared<T>(); \
   rtn->entity = self; \
   rtn->platform = platform; \
   components.push_back(rtn);
@@ -29,7 +29,7 @@ public:
   bool isAlive();
 
   template <typename T>
-  std::shared_ptr<T> addComponent()
+  std::sr1::shared_ptr<T> addComponent()
   {
     ENTITY_ADDCOMPONENT
     rtn->onInit();
@@ -38,7 +38,7 @@ public:
   }
 
   template <typename T, typename A>
-  std::shared_ptr<T> addComponent(A a)
+  std::sr1::shared_ptr<T> addComponent(A a)
   {
     ENTITY_ADDCOMPONENT
     rtn->onInit(a);
@@ -49,10 +49,10 @@ public:
   template<typename T>
   bool hasComponent()
   {
-    for(std::vector<std::shared_ptr<Component> >::iterator it = components.begin();
+    for(std::vector<std::sr1::shared_ptr<Component> >::iterator it = components.begin();
       it != components.end(); it++)
     {
-      std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(*it);
+      std::sr1::shared_ptr<T> t = std::sr1::dynamic_pointer_cast<T>(*it);
 
       if(t)
       {
@@ -64,12 +64,12 @@ public:
   }
 
   template<typename T>
-  std::shared_ptr<T> getComponent()
+  std::sr1::shared_ptr<T> getComponent()
   {
-    for(std::vector<std::shared_ptr<Component> >::iterator it = components.begin();
+    for(std::vector<std::sr1::shared_ptr<Component> >::iterator it = components.begin();
       it != components.end(); it++)
     {
-      std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(*it);
+      std::sr1::shared_ptr<T> t = std::sr1::dynamic_pointer_cast<T>(*it);
 
       if(t)
       {
@@ -80,7 +80,7 @@ public:
     throw Exception("Failed to obtain component");
   }
 
-  std::shared_ptr<Transform> getTransform();
+  std::sr1::shared_ptr<Transform> getTransform();
   void kill();
 
 private:
@@ -88,9 +88,9 @@ private:
   void display();
   void gui();
 
-  std::weak_ptr<Platform> platform;
-  std::weak_ptr<Entity> self;
-  std::vector<std::shared_ptr<Component> > components;
+  std::sr1::weak_ptr<Platform> platform;
+  std::sr1::weak_ptr<Entity> self;
+  std::vector<std::sr1::shared_ptr<Component> > components;
   std::sr1::zero_initialized<bool> alive;
 
 };

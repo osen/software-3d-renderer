@@ -9,7 +9,7 @@ class Texture;
 class SpriteRenderer : public Component
 {
   qsoft::Mesh mesh;
-  std::shared_ptr<Texture> texture;
+  std::sr1::shared_ptr<Texture> texture;
   std::sr1::zero_initialized<int> rows;
   std::sr1::zero_initialized<int> columns;
   std::sr1::zero_initialized<int> row;
@@ -20,9 +20,9 @@ class SpriteRenderer : public Component
 
 public:
   void onInit();
-  void onInit(std::shared_ptr<Texture> texture);
-  void setTexture(std::shared_ptr<Texture> texture);
-  std::shared_ptr<Texture> getTexture();
+  void onInit(std::sr1::shared_ptr<Texture> texture);
+  void setTexture(std::sr1::shared_ptr<Texture> texture);
+  std::sr1::shared_ptr<Texture> getTexture();
   void setLayout(int columns, int rows);
   void setFrame(int column, int row);
 

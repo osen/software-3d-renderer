@@ -2,8 +2,8 @@
 
 class SkyBox : public Component
 {
-  std::shared_ptr<Model> model;
-  std::shared_ptr<ModelRenderer> modelRenderer;
+  std::sr1::shared_ptr<Model> model;
+  std::sr1::shared_ptr<ModelRenderer> modelRenderer;
 
   void onTick();
 

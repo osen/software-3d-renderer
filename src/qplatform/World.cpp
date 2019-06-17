@@ -2,9 +2,9 @@
 #include "Entity.h"
 #include "Transform.h"
 
-std::shared_ptr<World> World::initialize(std::shared_ptr<Platform>& platform)
+std::sr1::shared_ptr<World> World::initialize(std::sr1::shared_ptr<Platform>& platform)
 {
-  std::shared_ptr<World> rtn = std::make_shared<World>();
+  std::sr1::shared_ptr<World> rtn = std::sr1::make_shared<World>();
   rtn->platform = platform;
 
   return rtn;
@@ -12,16 +12,16 @@ std::shared_ptr<World> World::initialize(std::shared_ptr<Platform>& platform)
 
 void World::reset()
 {
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = entities.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = entities.begin();
     it != entities.end(); it++)
   {
     (*it)->kill();
   }
 }
 
-std::shared_ptr<Entity> World::addEntity()
+std::sr1::shared_ptr<Entity> World::addEntity()
 {
-  std::shared_ptr<Entity> rtn = std::make_shared<Entity>();
+  std::sr1::shared_ptr<Entity> rtn = std::sr1::make_shared<Entity>();
 
   rtn->alive = true;
   rtn->self = rtn;
@@ -35,7 +35,7 @@ std::shared_ptr<Entity> World::addEntity()
 void World::tick()
 {
 /*
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = entities.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = entities.begin();
     it != entities.end(); it++)
   {
     (*it)->tick();
@@ -47,7 +47,7 @@ void World::tick()
     entities.at(i)->tick();
   }
 
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = entities.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = entities.begin();
     it != entities.end();)
   {
     if((*it)->alive == false)
@@ -63,7 +63,7 @@ void World::tick()
 
 void World::display()
 {
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = entities.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = entities.begin();
     it != entities.end(); it++)
   {
     (*it)->display();
@@ -72,7 +72,7 @@ void World::display()
 
 void World::gui()
 {
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = entities.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = entities.begin();
     it != entities.end(); it++)
   {
     (*it)->gui();

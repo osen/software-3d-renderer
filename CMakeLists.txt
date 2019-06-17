@@ -9,7 +9,7 @@ else()
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif()
 
-#add_definitions(-DSTD_SR1_DEBUG)
+add_definitions(-DSTD_SR1_DEBUG)
 
 if(WIN32)
   include_directories(

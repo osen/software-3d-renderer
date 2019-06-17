@@ -115,6 +115,9 @@ class weak_ptr;
 template <typename T>
 shared_ptr<T> make_shared();
 
+template <typename D, typename S>
+shared_ptr<D> dynamic_pointer_cast(shared_ptr<S> src);
+
 template <typename T>
 class shared_ptr
 {
@@ -123,6 +126,9 @@ class shared_ptr
   friend class weak_ptr<T>;
   friend class shared_ptr_lock<T>;
   friend shared_ptr<T> make_shared<T>();
+
+  template <typename D, typename S>
+  friend shared_ptr<D> dynamic_pointer_cast(shared_ptr<S> src);
 
 public:
   shared_ptr() { }
@@ -159,6 +165,16 @@ public:
     reset();
   }
 
+  operator bool() const
+  {
+    if(get())
+    {
+      return true;
+    }
+
+    return false;
+  }
+
   shared_ptr_lock_ptr<T> operator->() const
   {
     return shared_ptr_lock_ptr<T>(const_cast<shared_ptr<T> *>(this));
@@ -167,21 +183,6 @@ public:
   shared_ptr_lock_ref<T> operator*()
   {
     return shared_ptr_lock_ref<T>(this);
-  }
-
-  mutable zero_initialized<shared_ptr_refcount *> ref;
-
-private:
-  zero_initialized<size_t> locks;
-
-  T *get()
-  {
-    if(ref)
-    {
-      return static_cast<T *>(ref->ptr.data());
-    }
-
-    return NULL;
   }
 
   void reset()
@@ -213,6 +214,21 @@ private:
     }
 
     ref = NULL;
+  }
+
+  mutable zero_initialized<shared_ptr_refcount *> ref;
+
+private:
+  zero_initialized<size_t> locks;
+
+  T *get() const
+  {
+    if(ref)
+    {
+      return static_cast<T *>(ref->ptr.data());
+    }
+
+    return NULL;
   }
 
   void aquire(shared_ptr_refcount *ref)
@@ -248,6 +264,21 @@ shared_ptr<T> make_shared()
   ref->ptr = new T();
   ref->deleter = shared_ptr_deleter<T>;
   rtn.aquire(ref);
+
+  return rtn;
+}
+
+template <typename D, typename S>
+shared_ptr<D> dynamic_pointer_cast(shared_ptr<S> src)
+{
+  shared_ptr<D> rtn;
+
+  D *d = dynamic_cast<D *>(src.get());
+
+  if(d)
+  {
+    rtn.aquire(src.ref);
+  }
 
   return rtn;
 }

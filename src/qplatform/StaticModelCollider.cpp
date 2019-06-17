@@ -274,8 +274,8 @@ qsoft::Vector3 StaticModelCollider::getCollisionResponse(
 void StaticModelCollider::generateExtent()
 {
   std::vector<qsoft::Vector3> positions;
-  std::shared_ptr<ModelRenderer> mr = getEntity()->getComponent<ModelRenderer>();
-  std::shared_ptr<Model> model = mr->getModel();
+  std::sr1::shared_ptr<ModelRenderer> mr = getEntity()->getComponent<ModelRenderer>();
+  std::sr1::shared_ptr<Model> model = mr->getModel();
 
   for(size_t f = 0; f < model->faces.size(); f++)
   {
@@ -324,8 +324,8 @@ void StaticModelCollider::onInit()
   tryInc = 0.01f;
   maxInc = 0.5f;
 
-  std::shared_ptr<ModelRenderer> mr = getEntity()->getComponent<ModelRenderer>();
-  std::shared_ptr<Model> model = mr->getModel();
+  std::sr1::shared_ptr<ModelRenderer> mr = getEntity()->getComponent<ModelRenderer>();
+  std::sr1::shared_ptr<Model> model = mr->getModel();
   generateExtent();
 
   // Create collision columns
@@ -340,7 +340,7 @@ void StaticModelCollider::onInit()
 
     for(size_t x = 0; x < resolution; x++)
     {
-      std::shared_ptr<ColliderColumn> cc = std::make_shared<ColliderColumn>();
+      std::sr1::shared_ptr<ColliderColumn> cc = std::sr1::make_shared<ColliderColumn>();
       cc->size = colSize;
 
       // Overlap columns for sub column collision

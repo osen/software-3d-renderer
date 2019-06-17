@@ -21,16 +21,16 @@ void BoxCollider::setSize(const qsoft::Vector3& size)
 
 void BoxCollider::onTick()
 {
-  std::vector<std::shared_ptr<Entity> > smces;
+  std::vector<std::sr1::shared_ptr<Entity> > smces;
 
   getWorld()->getEntities<StaticModelCollider>(smces);
 
   qsoft::Vector3 np = getTransform()->getPosition() + offset;
 
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = smces.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = smces.begin();
     it != smces.end(); it++)
   {
-    std::shared_ptr<StaticModelCollider> smc =
+    std::sr1::shared_ptr<StaticModelCollider> smc =
       (*it)->getComponent<StaticModelCollider>();
 
     bool solved = false;

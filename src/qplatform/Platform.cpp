@@ -9,17 +9,17 @@
 #include "Gui.h"
 #include "Audio.h"
 
-void platform_main(std::shared_ptr<Platform> platform);
+void platform_main(std::sr1::shared_ptr<Platform> platform);
 
-std::shared_ptr<Platform> Platform::initialize()
+std::sr1::shared_ptr<Platform> Platform::initialize()
 {
-  std::shared_ptr<Platform> rtn = std::make_shared<Platform>();
+  std::sr1::shared_ptr<Platform> rtn = std::sr1::make_shared<Platform>();
 
   rtn->self = rtn;
   rtn->world = World::initialize(rtn);
   rtn->resources = Resources::initialize(rtn);
   rtn->window = Window::initialize();
-  rtn->keyboard = std::make_shared<Keyboard>();
+  rtn->keyboard = std::sr1::make_shared<Keyboard>();
   rtn->gui = Gui::initialize(rtn);
   rtn->audio = Audio::initialize(rtn);
   rtn->environment = Environment::initialize();
@@ -121,27 +121,27 @@ void Platform::display(int width, int height, int type, unsigned char *buffer)
 */
 }
 
-std::shared_ptr<Window> Platform::getWindow()
+std::sr1::shared_ptr<Window> Platform::getWindow()
 {
   return window;
 }
 
-std::shared_ptr<World> Platform::getWorld()
+std::sr1::shared_ptr<World> Platform::getWorld()
 {
   return world;
 }
 
-std::shared_ptr<Keyboard> Platform::getKeyboard()
+std::sr1::shared_ptr<Keyboard> Platform::getKeyboard()
 {
   return keyboard;
 }
 
-std::shared_ptr<Resources> Platform::getResources()
+std::sr1::shared_ptr<Resources> Platform::getResources()
 {
   return resources;
 }
 
-std::shared_ptr<Environment> Platform::getEnvironment()
+std::sr1::shared_ptr<Environment> Platform::getEnvironment()
 {
   return environment;
 }

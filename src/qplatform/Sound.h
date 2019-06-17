@@ -9,7 +9,6 @@
 #include <sr1/zero_initialized>
 #include <sr1/noncopyable>
 
-#include <memory>
 #include <string>
 #include <vector>
 

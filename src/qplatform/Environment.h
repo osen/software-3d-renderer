@@ -2,8 +2,8 @@
 #define QPLATFORM_ENVIRONMENT_H
 
 #include <sr1/zero_initialized>
+#include <sr1/memory>
 
-#include <memory>
 #include <string>
 
 class Platform;
@@ -17,7 +17,7 @@ public:
   std::string getDataPath();
 
 private:
-  static std::shared_ptr<Environment> initialize();
+  static std::sr1::shared_ptr<Environment> initialize();
 
   std::sr1::zero_initialized<double> lastTime;
   std::sr1::zero_initialized<float> deltaTime;

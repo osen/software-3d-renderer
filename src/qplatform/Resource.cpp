@@ -9,12 +9,12 @@ void Resource::load(std::string path)
   onLoad(path);
 }
 
-std::shared_ptr<Platform> Resource::getPlatform()
+std::sr1::shared_ptr<Platform> Resource::getPlatform()
 {
   return platform.lock();
 }
 
-std::shared_ptr<Resources> Resource::getResources()
+std::sr1::shared_ptr<Resources> Resource::getResources()
 {
   return getPlatform()->getResources();
 }

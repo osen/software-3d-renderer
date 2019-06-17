@@ -4,8 +4,6 @@
 #include <sr1/noncopyable>
 #include <sr1/memory>
 
-#include <memory>
-
 class Platform;
 class Environment;
 class Window;
@@ -22,14 +20,14 @@ class Component : public std::sr1::noncopyable
   friend class Entity; // to call init() during construction.
 
 public:
-  std::shared_ptr<Platform> getPlatform();
-  std::shared_ptr<World> getWorld();
-  std::shared_ptr<Environment> getEnvironment();
-  std::shared_ptr<Window> getWindow();
-  std::shared_ptr<Keyboard> getKeyboard();
-  std::shared_ptr<Resources> getResources();
-  std::shared_ptr<Entity> getEntity();
-  std::shared_ptr<Transform> getTransform();
+  std::sr1::shared_ptr<Platform> getPlatform();
+  std::sr1::shared_ptr<World> getWorld();
+  std::sr1::shared_ptr<Environment> getEnvironment();
+  std::sr1::shared_ptr<Window> getWindow();
+  std::sr1::shared_ptr<Keyboard> getKeyboard();
+  std::sr1::shared_ptr<Resources> getResources();
+  std::sr1::shared_ptr<Entity> getEntity();
+  std::sr1::shared_ptr<Transform> getTransform();
   std::sr1::shared_ptr<Gui> getGui();
   std::sr1::shared_ptr<Audio> getAudio();
 
@@ -46,8 +44,8 @@ private:
   void display();
   void gui();
 
-  std::weak_ptr<Platform> platform;
-  std::weak_ptr<Entity> entity;
+  std::sr1::weak_ptr<Platform> platform;
+  std::sr1::weak_ptr<Entity> entity;
 
 };
 

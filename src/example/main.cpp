@@ -20,8 +20,8 @@ int main()
   if(!window) abort();
   SDL_Surface* screen = SDL_GetWindowSurface(window);
 
-  std::shared_ptr<qsoft::Texture> b = qsoft::Texture::create(320, 240);
-  std::shared_ptr<qsoft::Texture> t = qsoft::Texture::create(2, 2);
+  std::sr1::shared_ptr<qsoft::Texture> b = qsoft::Texture::create(320, 240);
+  std::sr1::shared_ptr<qsoft::Texture> t = qsoft::Texture::create(2, 2);
   qsoft::Renderer r;
   qsoft::Mesh m;
 

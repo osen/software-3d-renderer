@@ -7,11 +7,11 @@
 
 void BongoScreen::onInit()
 {
-  std::shared_ptr<Model> model = getResources()->load<Model>("models/bongo/bongo");
+  std::sr1::shared_ptr<Model> model = getResources()->load<Model>("models/bongo/bongo");
   getEntity()->addComponent<ModelRenderer>(model);
-  std::shared_ptr<StaticModelCollider> smc = getEntity()->addComponent<StaticModelCollider>();
+  std::sr1::shared_ptr<StaticModelCollider> smc = getEntity()->addComponent<StaticModelCollider>();
 
-  std::shared_ptr<Entity> player = getWorld()->addEntity<Player>();
+  std::sr1::shared_ptr<Entity> player = getWorld()->addEntity<Player>();
   player->getComponent<Transform>()->setPosition(Vector3(-4, 3, 0));
   player->getComponent<Transform>()->setRotation(Vector3(0, -90, 0));
 
@@ -46,7 +46,7 @@ float BongoScreen::generateRandom()
 
 void BongoScreen::addZombie()
 {
-  std::shared_ptr<Entity> e = getWorld()->addEntity();
+  std::sr1::shared_ptr<Entity> e = getWorld()->addEntity();
   //e->getComponent<Transform>()->setPosition(position);
   float x = generateRandom();
   float y = generateRandom();
@@ -57,6 +57,6 @@ void BongoScreen::addZombie()
   std::cout << "Zombie Spawn: " << x << " " << y << std::endl;
 
   e->getComponent<Transform>()->setPosition(Vector3(x, 3, y));
-  std::shared_ptr<Zombie> sr = e->addComponent<Zombie>();
+  std::sr1::shared_ptr<Zombie> sr = e->addComponent<Zombie>();
   sr->activate();
 }

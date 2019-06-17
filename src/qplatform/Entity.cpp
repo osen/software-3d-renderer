@@ -5,7 +5,7 @@
 void Entity::tick()
 {
 /*
-  for(std::vector<std::shared_ptr<Component> >::iterator it = components.begin();
+  for(std::vector<std::sr1::shared_ptr<Component> >::iterator it = components.begin();
     it != components.end(); it++)
   {
     (*it)->tick();
@@ -20,7 +20,7 @@ void Entity::tick()
 
 void Entity::display()
 {
-  for(std::vector<std::shared_ptr<Component> >::iterator it = components.begin();
+  for(std::vector<std::sr1::shared_ptr<Component> >::iterator it = components.begin();
     it != components.end(); it++)
   {
     (*it)->display();
@@ -29,14 +29,14 @@ void Entity::display()
 
 void Entity::gui()
 {
-  for(std::vector<std::shared_ptr<Component> >::iterator it = components.begin();
+  for(std::vector<std::sr1::shared_ptr<Component> >::iterator it = components.begin();
     it != components.end(); it++)
   {
     (*it)->gui();
   }
 }
 
-std::shared_ptr<Transform> Entity::getTransform()
+std::sr1::shared_ptr<Transform> Entity::getTransform()
 {
   return getComponent<Transform>();
 }

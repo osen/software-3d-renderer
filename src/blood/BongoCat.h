@@ -4,9 +4,9 @@
 
 class BongoCat : public Component
 {
-  std::shared_ptr<Texture> texture;
-  std::shared_ptr<SpriteRenderer> spriteRenderer;
-  std::shared_ptr<Sound> music;
+  std::sr1::shared_ptr<Texture> texture;
+  std::sr1::shared_ptr<SpriteRenderer> spriteRenderer;
+  std::sr1::shared_ptr<Sound> music;
   std::sr1::zero_initialized<float> frame;
 
   void onTick();

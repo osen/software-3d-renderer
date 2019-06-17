@@ -3,8 +3,9 @@
 #include "Environment.h"
 #include "Platform.h"
 
+#include <sr1/memory>
+
 #include <vector>
-#include <memory>
 #include <string>
 #include <iostream>
 
@@ -16,7 +17,7 @@ class Resources
 
 public:
   template <typename T>
-  std::shared_ptr<T> load(std::string path)
+  std::sr1::shared_ptr<T> load(std::string path)
   {
     if(path.find(platform.lock()->getEnvironment()->getDataPath() + "/") != 0)
     {
@@ -27,7 +28,7 @@ public:
     {
       if(resources.at(i)->getPath() == path)
       {
-        std::shared_ptr<T> rtn = std::dynamic_pointer_cast<T>(resources.at(i));
+        std::sr1::shared_ptr<T> rtn = std::sr1::dynamic_pointer_cast<T>(resources.at(i));
 
         if(!rtn)
         {
@@ -39,7 +40,7 @@ public:
       }
     }
 
-    std::shared_ptr<T> rtn = std::make_shared<T>();
+    std::sr1::shared_ptr<T> rtn = std::sr1::make_shared<T>();
     rtn->platform = platform;
     rtn->load(path);
 
@@ -48,25 +49,25 @@ public:
     return rtn;
 
     // TODO: Try load from other paths
-    //return std::shared_ptr<T>();
+    //return std::sr1::shared_ptr<T>();
   }
 
   template <typename T, typename A, typename B>
-  std::shared_ptr<T> create(A a, B b)
+  std::sr1::shared_ptr<T> create(A a, B b)
   {
-    std::shared_ptr<T> rtn = std::make_shared<T>();
+    std::sr1::shared_ptr<T> rtn = std::sr1::make_shared<T>();
     rtn->platform = platform;
     rtn->onCreate(a, b);
     return rtn;
   }
 
-  std::shared_ptr<Texture> getDefaultTexture();
+  std::sr1::shared_ptr<Texture> getDefaultTexture();
 
 private:
-  static std::shared_ptr<Resources> initialize(std::shared_ptr<Platform>& platform);
+  static std::sr1::shared_ptr<Resources> initialize(std::sr1::shared_ptr<Platform>& platform);
 
-  std::vector<std::shared_ptr<Resource> > resources;
-  std::weak_ptr<Platform> platform;
-  std::shared_ptr<Texture> defaultTexture;
+  std::vector<std::sr1::shared_ptr<Resource> > resources;
+  std::sr1::weak_ptr<Platform> platform;
+  std::sr1::shared_ptr<Texture> defaultTexture;
 
 };

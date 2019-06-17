@@ -3,9 +3,9 @@
 
 #include <qsoft/qsoft.h>
 
-std::shared_ptr<Resources> Resources::initialize(std::shared_ptr<Platform>& platform)
+std::sr1::shared_ptr<Resources> Resources::initialize(std::sr1::shared_ptr<Platform>& platform)
 {
-  std::shared_ptr<Resources> rtn = std::make_shared<Resources>();
+  std::sr1::shared_ptr<Resources> rtn = std::sr1::make_shared<Resources>();
 
   rtn->platform = platform;
 
@@ -18,7 +18,7 @@ std::shared_ptr<Resources> Resources::initialize(std::shared_ptr<Platform>& plat
   return rtn;
 }
 
-std::shared_ptr<Texture> Resources::getDefaultTexture()
+std::sr1::shared_ptr<Texture> Resources::getDefaultTexture()
 {
   return defaultTexture;
 }

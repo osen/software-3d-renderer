@@ -20,7 +20,7 @@ void Player::onInit()
   getEntity()->addComponent<Camera>();
   //getEntity()->addComponent<Fade>();
 
-  std::shared_ptr<BoxCollider> bc = getEntity()->addComponent<BoxCollider>();
+  std::sr1::shared_ptr<BoxCollider> bc = getEntity()->addComponent<BoxCollider>();
   bc->setSize(Vector3(1, 2, 1));
   bc->setOffset(Vector3(0, -1, 0));
 
@@ -32,7 +32,7 @@ void Player::onInit()
 void Player::doAttack()
 {
   //std::cout << "Attack" << std::endl;
-  std::shared_ptr<Entity> hbe = getWorld()->addEntity();
+  std::sr1::shared_ptr<Entity> hbe = getWorld()->addEntity();
   hbe->getTransform()->setRotation(getTransform()->getRotation());
   hbe->getTransform()->setPosition(getTransform()->getPosition());
   hbe->getTransform()->translate(Vector3(0, 0, 1));
@@ -41,14 +41,14 @@ void Player::doAttack()
 
 void Player::checkHits()
 {
-  std::vector<std::shared_ptr<Entity> > entities;
+  std::vector<std::sr1::shared_ptr<Entity> > entities;
 
   getWorld()->getEntities<HitBox>(entities);
 
-  for(std::vector<std::shared_ptr<Entity> >::iterator it = entities.begin();
+  for(std::vector<std::sr1::shared_ptr<Entity> >::iterator it = entities.begin();
     it != entities.end(); it++)
   {
-    std::shared_ptr<HitBox> hb = (*it)->getComponent<HitBox>();
+    std::sr1::shared_ptr<HitBox> hb = (*it)->getComponent<HitBox>();
 
     if(hb->getOwner() == getEntity()) continue;
 

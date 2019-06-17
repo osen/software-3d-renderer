@@ -2,9 +2,9 @@
 #include <qsoft/qsoft.h>
 
 #include <sr1/zero_initialized>
+#include <sr1/memory>
 
 #include <vector>
-#include <memory>
 
 struct Extent
 {
@@ -26,7 +26,7 @@ struct ColliderColumn
 
 class StaticModelCollider : public Component
 {
-  std::vector<std::shared_ptr<ColliderColumn> > cols;
+  std::vector<std::sr1::shared_ptr<ColliderColumn> > cols;
   Extent extent;
   std::sr1::zero_initialized<float> resolution;
   std::sr1::zero_initialized<float> tryStep;
