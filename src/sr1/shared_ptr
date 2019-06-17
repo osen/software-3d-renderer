@@ -287,6 +287,7 @@ shared_ptr<D> dynamic_pointer_cast(shared_ptr<S> src)
 
 using std::shared_ptr;
 using std::make_shared;
+using std::dynamic_pointer_cast;
 
 #endif
 
