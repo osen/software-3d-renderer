@@ -187,15 +187,15 @@ qsoft::Vector3 StaticModelCollider::getCollisionResponse(
   for(std::vector<qsoft::Face>::iterator it = collisions.begin();
     it != collisions.end(); it++)
   {
-    qsoft::Vector3 n = faceNormal(*it);
-    n = n.normalize();
-    //std::cout << n.x << " " << n.y << " " << n.z << std::endl;
-    if(n.y < fabs(n.x) + fabs(n.z)) continue;
-
     if(!isColliding(*it, solve, size))
     {
       continue;
     }
+
+    qsoft::Vector3 n = faceNormal(*it);
+    n = n.normalize();
+    //std::cout << n.x << " " << n.y << " " << n.z << std::endl;
+    if(n.y < fabs(n.x) + fabs(n.z)) continue;
 
     float amount = tryStep;
 
